@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - У Ратуши</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🏛️ У Ратуши</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Карта зала</a>
+                <a href="profile.html" class="nav-link active">Личный кабинет</a>
+                <a href="admin.html" class="nav-link hidden" id="adminLink">Панель администратора</a>
+            </nav>
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-outline" onclick="window.location.href='index.html'">Войти</button>
+            </div>
+            <div class="user-menu hidden" id="userMenu">
+                <span id="userEmail"></span>
+                <button class="btn btn-outline" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <h2>Личный кабинет</h2>
+            
+            <!-- Сообщение для неавторизованных -->
+            <div class="auth-message" id="authMessage">
+                <p>Для просмотра профиля необходимо <a href="index.html">войти в систему</a></p>
+            </div>
+
+            <!-- Контент для авторизованных -->
+            <div class="profile-content hidden" id="profileContent">
+                <div class="profile-header">
+                    <div class="user-info">
+                        <h3 id="profileName">Загрузка...</h3>
+                        <p id="profileEmail"></p>
+                    </div>
+                    <div class="bonus-card">
+                        <div class="bonus-header">
+                            <span>🎁 Бонусные баллы</span>
+                        </div>
+                        <div class="bonus-amount" id="bonusBalance">0</div>
+                        <div class="bonus-label">баллов</div>
+                    </div>
+                </div>
+
+                <div class="profile-tabs">
+                    <button class="tab-btn active" onclick="switchTab('upcoming')">Предстоящие бронирования</button>
+                    <button class="tab-btn" onclick="switchTab('history')">История бронирований</button>
+                    <button class="tab-btn" onclick="switchTab('bonuses')">История баллов</button>
+                </div>
+
+                <div class="tab-content active" id="upcomingTab">
+                    <div class="bookings-list" id="upcomingBookings">
+                        <div class="loading">Загрузка...</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="historyTab">
+                    <div class="bookings-list" id="historyBookings">
+                        <div class="loading">Загрузка...</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="bonusesTab">
+                    <div class="bonuses-list" id="bonusesHistory">
+                        <div class="loading">Загрузка...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно подтверждения отмены -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3>Отменить бронирование?</h3>
+                <button class="modal-close" onclick="hideModal('cancelModal')">&times;</button>
+            </div>
+            <p>Вы уверены, что хотите отменить бронирование? Это действие нельзя отменить.</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="hideModal('cancelModal')">Нет, оставить</button>
+                <button class="btn btn-danger" id="confirmCancelBtn">Да, отменить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="notification" id="notification"></div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

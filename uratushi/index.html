@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>У Ратуши - Бронирование столиков</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🏛️ У Ратуши</h1>
+            </div>
+            <nav class="nav" id="nav">
+                <a href="index.html" class="nav-link active">Карта зала</a>
+                <a href="profile.html" class="nav-link hidden" id="profileLink">Личный кабинет</a>
+                <a href="admin.html" class="nav-link hidden" id="adminLink">Панель администратора</a>
+            </nav>
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-outline" onclick="showModal('loginModal')">Войти</button>
+                <button class="btn btn-primary" onclick="showModal('registerModal')">Регистрация</button>
+            </div>
+            <div class="user-menu hidden" id="userMenu">
+                <span id="userEmail"></span>
+                <button class="btn btn-outline" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="booking-section">
+                <div class="booking-header">
+                    <h2>Бронирование столиков</h2>
+                    <div class="date-selector">
+                        <label for="bookingDate">Дата:</label>
+                        <input type="date" id="bookingDate" onchange="loadHallMap()">
+                        <label for="bookingTime">Время:</label>
+                        <select id="bookingTime" onchange="loadHallMap()">
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:00">19:00</option>
+                            <option value="20:00">20:00</option>
+                            <option value="21:00">21:00</option>
+                            <option value="22:00">22:00</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="table-icon available"></span>
+                        <span>Свободно</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="table-icon pending"></span>
+                        <span>Ожидает подтверждения</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="table-icon occupied"></span>
+                        <span>Занято</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="table-icon maintenance"></span>
+                        <span>На ремонте</span>
+                    </div>
+                </div>
+
+                <div id="zoneSelector"></div>
+
+                <div class="hall-map" id="hallMap">
+                    <!-- Столики загружаются динамически -->
+                    <div class="loading">Загрузка карты зала...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Вход в систему</h3>
+                <button class="modal-close" onclick="hideModal('loginModal')">&times;</button>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-error" id="loginError"></div>
+                <button type="submit" class="btn btn-primary btn-block">Войти</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Регистрация</h3>
+                <button class="modal-close" onclick="hideModal('registerModal')">&times;</button>
+            </div>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Пароль</label>
+                    <input type="password" id="registerPassword" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="registerName">Имя</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Телефон</label>
+                    <input type="tel" id="registerPhone" required>
+                </div>
+                <div class="form-error" id="registerError"></div>
+                <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно бронирования -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Бронирование столика</h3>
+                <button class="modal-close" onclick="hideModal('bookingModal')">&times;</button>
+            </div>
+            <form id="bookingForm" onsubmit="handleBooking(event)">
+                <div class="booking-info">
+                    <p><strong>Столик №<span id="bookingTableNumber"></span></strong></p>
+                    <p>Дата: <span id="bookingDateDisplay"></span></p>
+                    <p>Время: <span id="bookingTimeDisplay"></span></p>
+                    <p>Мест: <span id="bookingTableSeats"></span></p>
+                </div>
+                <input type="hidden" id="bookingTableId">
+                <div class="form-group">
+                    <label for="bookingGuestName">Имя</label>
+                    <input type="text" id="bookingGuestName" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingGuestPhone">Телефон</label>
+                    <input type="tel" id="bookingGuestPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDuration">Длительность (часов)</label>
+                    <select id="bookingDuration">
+                        <option value="2">2 часа</option>
+                        <option value="3">3 часа</option>
+                        <option value="4">4 часа</option>
+                        <option value="5">5 часов</option>
+                        <option value="6">6 часов</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bookingNotes">Пожелания</label>
+                    <textarea id="bookingNotes" rows="3" placeholder="Особые пожелания к бронированию..."></textarea>
+                </div>
+                <div class="form-error" id="bookingError"></div>
+                <button type="submit" class="btn btn-primary btn-block">Забронировать</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="notification" id="notification"></div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/hall-map.js"></script>
+    <script src="js/booking.js"></script>
+</body>
+</html>
