@@ -3,50 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет - У Ратуши</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Личный кабинет — У Ратуши</title>
+    <meta name="description" content="Личный кабинет ресторана У Ратуши">
+    <meta name="theme-color" content="#0a0a0f">
+    <link rel="stylesheet" href="css/modern-dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%236366f1' rx='15' width='100' height='100'/><text y='.9em' x='50%' text-anchor='middle' font-size='70'>🏛️</text></svg>">
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <h1>🏛️ У Ратуши</h1>
-            </div>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🏛️</div>
+                <h1>У Ратуши</h1>
+            </a>
             <nav class="nav">
-                <a href="index.html" class="nav-link">Карта зала</a>
-                <a href="profile.html" class="nav-link active">Личный кабинет</a>
-                <a href="admin.html" class="nav-link hidden" id="adminLink">Панель администратора</a>
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-map"></i>
+                    Карта зала
+                </a>
+                <a href="profile.html" class="nav-link active">
+                    <i class="fas fa-user"></i>
+                    Личный кабинет
+                </a>
+                <a href="admin.html" class="nav-link hidden" id="adminLink">
+                    <i class="fas fa-cog"></i>
+                    Админ
+                </a>
             </nav>
             <div class="auth-buttons" id="authButtons">
-                <button class="btn btn-outline" onclick="window.location.href='index.html'">Войти</button>
+                <button class="btn btn-ghost" onclick="window.location.href='index.html'">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </button>
             </div>
             <div class="user-menu hidden" id="userMenu">
                 <span id="userEmail"></span>
-                <button class="btn btn-outline" onclick="logout()">Выйти</button>
+                <button class="btn btn-ghost" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Выйти
+                </button>
             </div>
         </div>
     </header>
 
     <main class="main">
         <div class="container">
-            <h2>Личный кабинет</h2>
-            
             <!-- Сообщение для неавторизованных -->
             <div class="auth-message" id="authMessage">
-                <p>Для просмотра профиля необходимо <a href="index.html">войти в систему</a></p>
+                <div style="text-align: center; padding: var(--space-16);">
+                    <i class="fas fa-lock" style="font-size: 4rem; color: var(--text-muted); margin-bottom: var(--space-6);"></i>
+                    <h3 style="margin-bottom: var(--space-4);">Доступ ограничен</h3>
+                    <p style="margin-bottom: var(--space-6);">Для просмотра профиля необходимо <a href="index.html" style="color: var(--accent-primary);">войти в систему</a></p>
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </a>
+                </div>
             </div>
 
             <!-- Контент для авторизованных -->
             <div class="profile-content hidden" id="profileContent">
                 <div class="profile-header">
                     <div class="user-info">
-                        <h3 id="profileName">Загрузка...</h3>
-                        <p id="profileEmail"></p>
+                        <h3>
+                            <i class="fas fa-user-circle" style="color: var(--accent-primary); margin-right: 12px;"></i>
+                            <span id="profileName">Загрузка...</span>
+                        </h3>
+                        <p id="profileEmail">
+                            <i class="fas fa-envelope" style="margin-right: 6px;"></i>
+                        </p>
                     </div>
                     <div class="bonus-card">
                         <div class="bonus-header">
-                            <span>🎁 Бонусные баллы</span>
+                            <i class="fas fa-gift"></i>
+                            Бонусные баллы
                         </div>
                         <div class="bonus-amount" id="bonusBalance">0</div>
                         <div class="bonus-label">баллов</div>
@@ -54,26 +86,44 @@
                 </div>
 
                 <div class="profile-tabs">
-                    <button class="tab-btn active" onclick="switchTab('upcoming')">Предстоящие бронирования</button>
-                    <button class="tab-btn" onclick="switchTab('history')">История бронирований</button>
-                    <button class="tab-btn" onclick="switchTab('bonuses')">История баллов</button>
+                    <button class="tab-btn active" onclick="switchTab('upcoming')">
+                        <i class="fas fa-calendar-alt"></i>
+                        Предстоящие
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('history')">
+                        <i class="fas fa-history"></i>
+                        История
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('bonuses')">
+                        <i class="fas fa-coins"></i>
+                        Баллы
+                    </button>
                 </div>
 
                 <div class="tab-content active" id="upcomingTab">
                     <div class="bookings-list" id="upcomingBookings">
-                        <div class="loading">Загрузка...</div>
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Загрузка...</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="tab-content" id="historyTab">
                     <div class="bookings-list" id="historyBookings">
-                        <div class="loading">Загрузка...</div>
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Загрузка...</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="tab-content" id="bonusesTab">
                     <div class="bonuses-list" id="bonusesHistory">
-                        <div class="loading">Загрузка...</div>
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Загрузка...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,13 +134,29 @@
     <div class="modal" id="cancelModal">
         <div class="modal-content modal-sm">
             <div class="modal-header">
-                <h3>Отменить бронирование?</h3>
-                <button class="modal-close" onclick="hideModal('cancelModal')">&times;</button>
+                <h3>
+                    <i class="fas fa-exclamation-triangle" style="color: var(--status-occupied); margin-right: 8px;"></i>
+                    Отменить бронирование?
+                </h3>
+                <button class="modal-close" onclick="hideModal('cancelModal')">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <p>Вы уверены, что хотите отменить бронирование? Это действие нельзя отменить.</p>
-            <div class="modal-actions">
-                <button class="btn btn-outline" onclick="hideModal('cancelModal')">Нет, оставить</button>
-                <button class="btn btn-danger" id="confirmCancelBtn">Да, отменить</button>
+            <div class="content">
+                <p style="margin-bottom: var(--space-6);">
+                    <i class="fas fa-info-circle" style="color: var(--accent-primary); margin-right: 8px;"></i>
+                    Вы уверены, что хотите отменить бронирование? Это действие нельзя отменить.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('cancelModal')">
+                    <i class="fas fa-arrow-left"></i>
+                    Нет, оставить
+                </button>
+                <button class="btn btn-danger" id="confirmCancelBtn">
+                    <i class="fas fa-trash"></i>
+                    Да, отменить
+                </button>
             </div>
         </div>
     </div>

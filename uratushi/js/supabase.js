@@ -25,13 +25,12 @@ function initSupabase() {
         return null;
     }
     
-    // Ждем загрузки Supabase CDN
     if (typeof supabase !== 'undefined' && typeof supabase.createClient === 'function') {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log('Supabase клиент инициализирован');
+        console.log('✓ Supabase инициализирован');
         return supabaseClient;
     } else {
-        console.error('Supabase библиотека не загружена');
+        console.error('✗ Supabase библиотека не загружена');
         return null;
     }
 }
@@ -67,12 +66,11 @@ function initZoneSwitcher() {
     if (!container) return;
     
     var currentZone = getCurrentZone();
-    var currentIndex = zones.indexOf(currentZone);
     
     container.innerHTML = '<div class="zone-nav">' +
-        '<button class="zone-arrow" onclick="changeZone(-1)">◀</button>' +
+        '<button class="zone-arrow" onclick="changeZone(-1)" aria-label="Предыдущая зона"><i class="fas fa-chevron-left"></i></button>' +
         '<span class="zone-title" id="zoneTitle">' + zoneNames[currentZone] + '</span>' +
-        '<button class="zone-arrow" onclick="changeZone(1)">▶</button>' +
+        '<button class="zone-arrow" onclick="changeZone(1)" aria-label="Следующая зона"><i class="fas fa-chevron-right"></i></button>' +
         '</div>';
 }
 
@@ -104,12 +102,20 @@ function showNotification(message, type) {
     var notification = document.getElementById('notification');
     if (!notification) return;
     
-    notification.textContent = message;
+    var icon = '';
+    switch(type) {
+        case 'success': icon = '<i class="fas fa-check-circle"></i> '; break;
+        case 'error': icon = '<i class="fas fa-exclamation-circle"></i> '; break;
+        case 'warning': icon = '<i class="fas fa-exclamation-triangle"></i> '; break;
+        default: icon = '<i class="fas fa-info-circle"></i> ';
+    }
+    
+    notification.innerHTML = icon + message;
     notification.className = 'notification ' + type + ' show';
     
     setTimeout(function() {
         notification.classList.remove('show');
-    }, 3000);
+    }, 4000);
 }
 
 function showModal(modalId) {
@@ -117,6 +123,10 @@ function showModal(modalId) {
     if (modal) {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        
+        // Focus trap for accessibility
+        var firstInput = modal.querySelector('input, button:not(.modal-close)');
+        if (firstInput) firstInput.focus();
     }
 }
 
@@ -128,10 +138,22 @@ function hideModal(modalId) {
     }
 }
 
+// Close modal on backdrop click
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('modal')) {
         event.target.classList.remove('active');
         document.body.style.overflow = '';
+    }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        var activeModal = document.querySelector('.modal.active');
+        if (activeModal) {
+            activeModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
 });
 

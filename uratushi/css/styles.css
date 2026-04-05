@@ -1,4 +1,19 @@
+/* ============================================
+   URATUSHI RESTAURANT BOOKING SYSTEM
+   ============================================
+   Main stylesheet
+   Import order:
+   1. design-tokens.css (variables)
+   2. components.css (new components)
+   3. This file (legacy overrides)
+   ============================================ */
+
+/* Import design tokens */
+@import './design-tokens.css';
+
 /* === БАЗОВЫЕ СТИЛИ === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,46 +21,99 @@
 }
 
 :root {
-    --primary: #8B5A2B;
-    --primary-dark: #6B4423;
-    --primary-light: #A67B5B;
-    --secondary: #2E7D32;
-    --danger: #C62828;
-    --warning: #F9A825;
-    --success: #43A047;
-    --info: #1976D2;
-    --gray-100: #F5F5F5;
-    --gray-200: #EEEEEE;
-    --gray-300: #E0E0E0;
-    --gray-400: #BDBDBD;
-    --gray-500: #9E9E9E;
-    --gray-600: #757575;
-    --gray-700: #616161;
-    --gray-800: #424242;
-    --gray-900: #212121;
-    --white: #FFFFFF;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow: 0 2px 4px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    /* === ЦВЕТА (Design Tokens) === */
+    --color-primary: #8B5A2B;
+    --color-primary-dark: #6B4423;
+    --color-primary-light: #C4956A;
+    --color-secondary: #2E7D32;
+    --color-danger: #C62828;
+    --color-warning: #F9A825;
+    --color-success: #43A047;
+    --color-info: #1976D2;
+    --color-gold: #D4AF37;
+    
+    --color-bg: #FAF7F2;
+    --color-surface: #FFFFFF;
+    --color-border: #E8E0D5;
+    --color-border-light: #F5F0E8;
+    
+    --color-text-primary: #2D2A26;
+    --color-text-secondary: #6B6560;
+    --color-text-muted: #9E9891;
+    --color-text-inverse: #FFFFFF;
+    
+    /* Zone backgrounds */
+    --zone-main-bg: #F5EDE3;
+    --zone-middle-bg: #E8E0D5;
+    --zone-basement-bg: #2D2A26;
+    --zone-dancefloor-bg: #1A1816;
+    
+    /* Legacy aliases */
+    --primary: var(--color-primary);
+    --primary-dark: var(--color-primary-dark);
+    --primary-light: var(--color-primary-light);
+    --secondary: var(--color-secondary);
+    --danger: var(--color-danger);
+    --warning: var(--color-warning);
+    --success: var(--color-success);
+    --info: var(--color-info);
+    --white: var(--color-surface);
+    --gray-100: var(--color-bg);
+    --gray-200: var(--color-border-light);
+    --gray-300: var(--color-border);
+    --gray-400: var(--color-text-muted);
+    --gray-500: var(--color-text-secondary);
+    --gray-600: var(--color-text-secondary);
+    --gray-700: var(--color-text-primary);
+    --gray-800: var(--color-text-primary);
+    --gray-900: var(--color-text-primary);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+    --shadow-primary: 0 4px 14px rgba(139, 90, 43, 0.25);
+    --shadow-success: 0 4px 14px rgba(67, 160, 71, 0.25);
+    --shadow-warning: 0 4px 14px rgba(249, 168, 37, 0.25);
+    --shadow-danger: 0 4px 14px rgba(198, 40, 40, 0.25);
+    
+    /* Border Radius */
     --radius-sm: 4px;
     --radius: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    
+    /* Typography */
+    --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Transitions */
+    --transition-fast: 150ms;
+    --transition-normal: 200ms;
+    --transition-slow: 300ms;
+    --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background-color: var(--gray-100);
-    color: var(--gray-800);
-    line-height: 1.5;
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    line-height: 1.6;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: var(--container-max, 1280px);
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 var(--space-6, 24px);
 }
 
 .hidden {
@@ -54,52 +122,64 @@ body {
 
 .loading {
     text-align: center;
-    padding: 40px;
-    color: var(--gray-500);
+    padding: var(--space-10, 40px);
+    color: var(--color-text-muted);
+    font-size: var(--text-body, 16px);
 }
 
 /* === ШАПКА === */
 .header {
-    background: var(--white);
+    background: var(--color-surface);
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: var(--z-sticky, 200);
+    height: var(--header-height, 72px);
 }
 
 .header .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 100%;
 }
 
 .logo h1 {
+    font-family: var(--font-heading);
     font-size: 1.5rem;
-    color: var(--primary);
+    color: var(--color-primary);
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+}
+
+.logo h1::before {
+    content: '🏛️';
 }
 
 .nav {
     display: flex;
-    gap: 8px;
+    gap: var(--space-2, 8px);
 }
 
 .nav-link {
-    padding: 8px 16px;
-    color: var(--gray-600);
+    padding: var(--space-2, 8px) var(--space-4, 16px);
+    color: var(--color-text-secondary);
     text-decoration: none;
     border-radius: var(--radius);
-    transition: all 0.2s;
+    transition: var(--transition-colors, all var(--transition-normal, 200ms) var(--ease-default, cubic-bezier(0.4, 0, 0.2, 1)));
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .nav-link:hover {
-    color: var(--primary);
-    background: var(--gray-100);
+    color: var(--color-primary);
+    background: rgba(139, 90, 43, 0.08);
 }
 
 .nav-link.active {
-    color: var(--primary);
+    color: var(--color-primary);
     background: rgba(139, 90, 43, 0.1);
     font-weight: 500;
 }
@@ -107,11 +187,11 @@ body {
 .auth-buttons, .user-menu {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2, 8px);
 }
 
 .user-menu span {
-    color: var(--gray-600);
+    color: var(--color-text-secondary);
     font-size: 0.9rem;
 }
 
@@ -120,15 +200,17 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
+    padding: var(--space-3, 12px) var(--space-5, 20px);
     border: none;
     border-radius: var(--radius);
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-family: var(--font-body);
+    font-size: var(--text-body, 16px);
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-normal, 200ms) var(--ease-default, cubic-bezier(0.4, 0, 0.2, 1));
     text-decoration: none;
-    gap: 8px;
+    gap: var(--space-2, 8px);
+    min-height: var(--click-target-min, 44px);
 }
 
 .btn-block {
@@ -136,57 +218,108 @@ body {
 }
 
 .btn-primary {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-primary);
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .btn-outline {
     background: transparent;
-    color: var(--primary);
-    border: 1px solid var(--primary);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
 }
 
 .btn-outline:hover {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+}
+
+.btn-ghost:hover {
+    background: var(--color-border-light);
+    color: var(--color-text-primary);
 }
 
 .btn-danger {
-    background: var(--danger);
-    color: var(--white);
+    background: var(--color-danger);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-danger);
 }
 
 .btn-danger:hover {
     background: #B71C1C;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-success {
-    background: var(--success);
-    color: var(--white);
+    background: var(--color-success);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-success);
 }
 
 .btn-success:hover {
     background: #388E3C;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-secondary {
-    background: var(--gray-200);
-    color: var(--gray-700);
+    background: var(--color-border-light);
+    color: var(--color-text-primary);
 }
 
 .btn-secondary:hover {
-    background: var(--gray-300);
+    background: var(--color-border);
 }
 
 .btn-sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
+    padding: var(--space-1, 4px) var(--space-3, 12px);
+    font-size: var(--text-body-sm, 14px);
+    min-height: 32px;
+}
+
+.btn-lg {
+    padding: var(--space-4, 16px) var(--space-6, 24px);
+    font-size: var(--text-body-lg, 18px);
+    min-height: 52px;
+}
+
+.btn-icon {
+    width: var(--click-target-min, 44px);
+    height: var(--click-target-min, 44px);
+    padding: 0;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Focus state for accessibility */
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 /* === ОСНОВНОЙ КОНТЕНТ === */
@@ -1345,3 +1478,6 @@ input:focus, select:focus, textarea:focus {
         width: 100%;
     }
 }
+
+/* Import additional components */
+@import './components.css';

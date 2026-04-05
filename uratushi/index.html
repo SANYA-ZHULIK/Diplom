@@ -1,44 +1,698 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>У Ратуши - Бронирование столиков</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>У Ратуши — Ресторан европейской кухни</title>
+    <meta name="description" content="Ресторан У Ратуши — изысканная европейская кухня в историческом центре. Бронирование столиков онлайн.">
+    <meta name="theme-color" content="#0a0a0f">
+    <link rel="stylesheet" href="css/dual-theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%236366f1' rx='15' width='100' height='100'/><text y='.9em' x='50%' text-anchor='middle' font-size='70'>🏛️</text></svg>">
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <h1>🏛️ У Ратуши</h1>
-            </div>
-            <nav class="nav" id="nav">
-                <a href="index.html" class="nav-link active">Карта зала</a>
-                <a href="profile.html" class="nav-link hidden" id="profileLink">Личный кабинет</a>
-                <a href="admin.html" class="nav-link hidden" id="adminLink">Панель администратора</a>
+            <a href="#" class="logo">
+                <div class="logo-icon">🏛️</div>
+                <h1>У Ратуши</h1>
+            </a>
+            <nav class="nav">
+                <a href="#about" class="nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    <span>О нас</span>
+                </a>
+                <a href="#menu" class="nav-link">
+                    <i class="fas fa-utensils"></i>
+                    <span>Меню</span>
+                </a>
+                <a href="#offers" class="nav-link">
+                    <i class="fas fa-tags"></i>
+                    <span>Акции</span>
+                </a>
+                <a href="#events" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Мероприятия</span>
+                </a>
+                <a href="hall-plan.html" class="nav-link">
+                    <i class="fas fa-map"></i>
+                    <span>План зала</span>
+                </a>
+                <a href="#booking" class="nav-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Бронирование</span>
+                </a>
+                <a href="#contacts" class="nav-link">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Контакты</span>
+                </a>
             </nav>
+            <div class="theme-toggle">
+                <button class="theme-toggle-btn active" id="darkThemeBtn" onclick="setTheme('dark')" aria-label="Тёмная тема">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="theme-toggle-btn" id="lightThemeBtn" onclick="setTheme('light')" aria-label="Светлая тема">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
             <div class="auth-buttons" id="authButtons">
-                <button class="btn btn-outline" onclick="showModal('loginModal')">Войти</button>
-                <button class="btn btn-primary" onclick="showModal('registerModal')">Регистрация</button>
+                <button class="btn btn-ghost" onclick="showModal('loginModal')">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </button>
+                <button class="btn btn-primary" onclick="showModal('registerModal')">
+                    <i class="fas fa-user-plus"></i>
+                    Регистрация
+                </button>
             </div>
             <div class="user-menu hidden" id="userMenu">
                 <span id="userEmail"></span>
-                <button class="btn btn-outline" onclick="logout()">Выйти</button>
+                <a href="profile.html" class="btn btn-ghost">
+                    <i class="fas fa-user"></i>
+                    Кабинет
+                </a>
+                <button class="btn btn-ghost" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="main">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
         <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Изысканная кухня<br>в сердце <span>города</span></h1>
+                    <p>Ресторан «У Ратуши» — это уникальное сочетание исторической атмосферы и современной гастрономии. Приглашаем вас окунуться в мир изысканных вкусов.</p>
+                    <div class="hero-buttons">
+                        <a href="#booking" class="btn btn-primary btn-lg">
+                            <i class="fas fa-calendar-check"></i>
+                            Забронировать столик
+                        </a>
+                        <a href="#menu" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-utensils"></i>
+                            Смотреть меню
+                        </a>
+                    </div>
+                    <div class="hero-features">
+                        <div class="hero-feature">
+                            <div class="hero-feature-icon">
+                                <i class="fas fa-chair"></i>
+                            </div>
+                            <div class="hero-feature-text">
+                                <strong>4 зала</strong>
+                                Более 30 столиков
+                            </div>
+                        </div>
+                        <div class="hero-feature">
+                            <div class="hero-feature-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="hero-feature-text">
+                                <strong>4.9 Rating</strong>
+                                На основе 500+ отзывов
+                            </div>
+                        </div>
+                        <div class="hero-feature">
+                            <div class="hero-feature-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="hero-feature-text">
+                                <strong>Бонусы</strong>
+                                Начисляем за каждый визит
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=500&fit=crop" alt="Интерьер ресторана">
+                    <div class="hero-badge">
+                        <div class="hero-badge-icon">🏆</div>
+                        <div class="hero-badge-value">Top 10</div>
+                        <div class="hero-badge-text">Ресторанов города</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=700&fit=crop" alt="Интерьер ресторана">
+                    <div class="about-badge">
+                        <div class="about-badge-number">15+</div>
+                        <div class="about-badge-text">лет работы</div>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <span class="section-label">
+                        <i class="fas fa-landmark"></i>
+                        О ресторане
+                    </span>
+                    <h2>Изысканная кухня в историческом здании Ратуши</h2>
+                    <p>С 2010 года ресторан «У Ратуши» радует гостей изысканной европейской кухней в атмосфере исторического центра. Наше здание — памятник архитектуры XVIII века, полностью отреставрированный с сохранением уникального духа эпохи.</p>
+                    <p>Мы гордимся нашей командой: шеф-повар Александр Морозов учился в Париже и Милане, а сомелье Виктория Белова входит в топ-50 лучших России. Каждое блюдо — произведение искусства.</p>
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <div class="about-stat-value">500+</div>
+                            <div class="about-stat-label">отзывов на Google</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-value">4.9</div>
+                            <div class="about-stat-label">рейтинг</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-value">30+</div>
+                            <div class="about-stat-label">столиков</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2>Почему выбирают нас</h2>
+                <p>Мы создаём незабываемые моменты для каждого гостя</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Авторская кухня</h3>
+                    <p>Блюда от шеф-повара с 20-летним опытом работы в лучших ресторанах мира</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-wine-glass-alt"></i>
+                    </div>
+                    <h3>Вина со всего мира</h3>
+                    <p>Более 200 наименований вин из Франции, Италии, Испании и Нового Света</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>Живая музыка</h3>
+                    <p>Каждый вечер — выступления джаз-бэнда и кавер-групп. Танцпол для желающих</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <h3>Премиум сервис</h3>
+                    <p>Внимательное обслуживание, персональный подход к каждому гостю</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers Section -->
+    <section class="section" id="offers">
+        <div class="container">
+            <div class="section-header">
+                <h2>Специальные предложения</h2>
+                <p>Выгодные акции и мероприятия этого месяца</p>
+            </div>
+            <div class="offers-grid">
+                <div class="offer-card offer-featured">
+                    <div class="offer-badge">Хит сезона</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <h3>День рождения</h3>
+                    <p>Скидка 20% на всё меню в день рождения и за 3 дня до/после. Бесплатный десерт и игристое вино!</p>
+                    <div class="offer-price">
+                        <span class="offer-price-old">—</span>
+                        <span class="offer-price-value">Скидка 20%</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="showModal('bookingModal')">Забронировать</button>
+                </div>
+                <div class="offer-card">
+                    <div class="offer-icon">
+                        <i class="fas fa-wine-glass"></i>
+                    </div>
+                    <h3>Бизнес-ланч</h3>
+                    <p>Комплексный обед из 3 блюд: суп, основное блюдо, напиток. С понедельника по пятницу.</p>
+                    <div class="offer-price">
+                        <span class="offer-price-old">1 500 ₽</span>
+                        <span class="offer-price-value">990 ₽</span>
+                    </div>
+                </div>
+                <div class="offer-card">
+                    <div class="offer-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Банкет</h3>
+                    <p>От 10 гостей — специальные условия. Персональное меню и украшение зала.</p>
+                    <div class="offer-price">
+                        <span class="offer-price-value">от 3 500 ₽/чел</span>
+                    </div>
+                </div>
+                <div class="offer-card">
+                    <div class="offer-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Программа лояльности</h3>
+                    <p>Накопительные бонусы за каждое посещение. Серебряная и золотая карты для постоянных гостей.</p>
+                    <div class="offer-price">
+                        <span class="offer-price-value">+10% к каждому счёту</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="section section-alt" id="events">
+        <div class="container">
+            <div class="section-header">
+                <h2>Мероприятия</h2>
+                <p>Живая музыка, тематические вечера и праздники</p>
+            </div>
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-date">
+                        <div class="event-date-day">05</div>
+                        <div class="event-date-month">Апр</div>
+                    </div>
+                    <div class="event-content">
+                        <span class="event-tag tag-jazz">
+                            <i class="fas fa-music"></i> Джаз
+                        </span>
+                        <h3>Джаз-вечер с Trio Midnight</h3>
+                        <p>Изысканный джаз в исполнении московского трио. Живая музыка с 20:00 до 23:00.</p>
+                        <div class="event-time">
+                            <i class="fas fa-clock"></i>
+                            20:00 — 23:00
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-date">
+                        <div class="event-date-day">12</div>
+                        <div class="event-date-month">Апр</div>
+                    </div>
+                    <div class="event-content">
+                        <span class="event-tag tag-wine">
+                            <i class="fas fa-wine-glass-alt"></i> Вино
+                        </span>
+                        <h3>Дегустация вин Тосканы</h3>
+                        <p>Сомелье Виктория проведёт дегустацию 6 лучших вин региона Тоскана.</p>
+                        <div class="event-time">
+                            <i class="fas fa-clock"></i>
+                            19:00 — 21:00
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-date">
+                        <div class="event-date-day">19</div>
+                        <div class="event-date-month">Апр</div>
+                    </div>
+                    <div class="event-content">
+                        <span class="event-tag tag-party">
+                            <i class="fas fa-glass-cheers"></i> Вечеринка
+                        </span>
+                        <h3>Латинская ночь</h3>
+                        <p>Танцы, коктейли и живая музыка в стиле латино. DJ Carlos в гостях!</p>
+                        <div class="event-time">
+                            <i class="fas fa-clock"></i>
+                            21:00 — 03:00
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Private Dining Section -->
+    <section class="section" id="private">
+        <div class="container">
+            <div class="private-content">
+                <div class="private-text">
+                    <span class="section-label">
+                        <i class="fas fa-star"></i>
+                        Особые услуги
+                    </span>
+                    <h2>Частные мероприятия и банкеты</h2>
+                    <p>Проведите незабываемое событие в нашем ресторане. Мы предлагаем:</p>
+                    <ul class="private-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>private зал</strong>
+                                <span>Отдельное помещение на 6-20 гостей с персональным обслуживанием</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>Кейтеринг</strong>
+                                <span>Выездное обслуживание: свадьбы, корпоративы, фуршеты</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>Персональный шеф-повар</strong>
+                                <span>Индивидуальное меню для особых случаев</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>Живая музыка</strong>
+                                <span>Джаз, классика, кавер-группы — на ваш выбор</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="tel:+74951234567" class="btn btn-primary btn-lg">
+                        <i class="fas fa-phone"></i>
+                        Заказать банкет
+                    </a>
+                </div>
+                <div class="private-image">
+                    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&h=500&fit=crop" alt="Банкет">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section section-alt" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Галерея</h2>
+                <p>Атмосфера ресторана в фотографиях</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-item-large">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop" alt="Интерьер">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=300&fit=crop" alt="Блюда">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&h=300&fit=crop" alt="Бар">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop" alt="Вечер">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=400&h=300&fit=crop" alt="Кухня">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Частые вопросы</h2>
+                <p>Ответы на популярные вопросы наших гостей</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-chair"></i>
+                        <h3>Нужно ли бронировать столик?</h3>
+                    </div>
+                    <p class="faq-answer">Мы рекомендуем бронировать столик заранее, особенно в выходные и праздничные дни. Онлайн-бронирование доступно на нашем сайте или по телефону.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-male"></i>
+                        <h3>Есть ли дресс-код?</h3>
+                    </div>
+                    <p class="faq-answer">Мы придерживаемся smart casual. Просим гостей воздержаться от спортивной одежды и пляжных сланцев.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-parking"></i>
+                        <h3>Есть ли парковка?</h3>
+                    </div>
+                    <p class="faq-answer">У ресторана есть бесплатная парковка на 20 мест. Также доступна городская парковка рядом.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-baby"></i>
+                        <h3>Можно ли с детьми?</h3>
+                    </div>
+                    <p class="faq-answer">Да, мы рады гостям с детьми. Детское меню и высокие стульчики доступны. В выходные работает детская комната.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-wifi"></i>
+                        <h3>Есть ли Wi-Fi?</h3>
+                    </div>
+                    <p class="faq-answer">Бесплатный Wi-Fi для всех гостей. Пароль указан на столике или вы можете спросить официанта.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-credit-card"></i>
+                        <h3>Какие способы оплаты?</h3>
+                    </div>
+                    <p class="faq-answer">Принимаем наличные, карты Visa, Mastercard, МИР, а также бесконтактную оплату и Apple/Google Pay.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <div class="newsletter-text">
+                    <h2>Подпишитесь на новости</h2>
+                    <p>Узнавайте первыми о новых акциях, мероприятиях и обновлениях меню</p>
+                </div>
+                <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                    <input type="email" placeholder="Ваш email" required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Подписаться
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hours & Contacts Section -->
+    <section class="section section-alt" id="contacts">
+        <div class="container">
+            <div class="hours-grid">
+                <div class="hours-content">
+                    <h2>Часы работы</h2>
+                    <p style="margin-bottom: var(--space-6);">Мы работаем без выходных и ждём вас каждый день</p>
+                    <div class="hours-list">
+                        <div class="hours-item">
+                            <span class="hours-day">
+                                <i class="fas fa-clock"></i>
+                                Понедельник — Четверг
+                            </span>
+                            <span class="hours-time">12:00 — 23:00</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">
+                                <i class="fas fa-clock"></i>
+                                Пятница — Суббота
+                            </span>
+                            <span class="hours-time">12:00 — 02:00</span>
+                        </div>
+                        <div class="hours-item today">
+                            <span class="hours-day">
+                                <i class="fas fa-clock"></i>
+                                Воскресенье
+                            </span>
+                            <span class="hours-time">12:00 — 23:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3>Свяжитесь с нами</h3>
+                    <div class="contact-list">
+                        <a href="tel:+74951234567" class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-item-text">
+                                <div class="contact-item-label">Телефон</div>
+                                <div class="contact-item-value">+7 (495) 123-45-67</div>
+                            </div>
+                        </a>
+                        <a href="mailto:info@uratushi.ru" class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-item-text">
+                                <div class="contact-item-label">Email</div>
+                                <div class="contact-item-value">info@uratushi.ru</div>
+                            </div>
+                        </a>
+                        <a href="#" class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-item-text">
+                                <div class="contact-item-label">Адрес</div>
+                                <div class="contact-item-value">ул. Ратушная, 15, Москва</div>
+                            </div>
+                        </a>
+                        <a href="#" class="contact-item">
+                            <i class="fab fa-instagram"></i>
+                            <div class="contact-item-text">
+                                <div class="contact-item-label">Instagram</div>
+                                <div class="contact-item-value">@uratushi_restaurant</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="section" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <h2>Наше меню</h2>
+                <p>Откройте для себя изысканные блюда европейской кухни</p>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="menu-card-image">🥩</div>
+                    <div class="menu-card-content">
+                        <span class="menu-card-category">Основные блюда</span>
+                        <h3>Стейк Рибай</h3>
+                        <p class="menu-card-description">Мраморная говядина, 300г, соус из чёрного перца, овощи гриль</p>
+                        <div class="menu-card-footer">
+                            <span class="menu-card-price">2 900 ₽</span>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-card-image">🥗</div>
+                    <div class="menu-card-content">
+                        <span class="menu-card-category">Салаты</span>
+                        <h3>Цезарь с креветками</h3>
+                        <p class="menu-card-description">Романно, тигровые креветки, пармезан, соус цезарь, гренки</p>
+                        <div class="menu-card-footer">
+                            <span class="menu-card-price">890 ₽</span>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-card-image">🍝</div>
+                    <div class="menu-card-content">
+                        <span class="menu-card-category">Паста</span>
+                        <h3>Карбонара</h3>
+                        <p class="menu-card-description">Домашняя паста, гуанчиале, пармезан, яичный желток, чёрный перец</p>
+                        <div class="menu-card-footer">
+                            <span class="menu-card-price">690 ₽</span>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-card-image">🍷</div>
+                    <div class="menu-card-content">
+                        <span class="menu-card-category">Напитки</span>
+                        <h3>Вино Chianti Classico</h3>
+                        <p class="menu-card-description">Италия, Тоскана, 750 мл. Идеально к мясным блюдам</p>
+                        <div class="menu-card-footer">
+                            <span class="menu-card-price">4 500 ₽</span>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-card-image">🍰</div>
+                    <div class="menu-card-content">
+                        <span class="menu-card-category">Десерты</span>
+                        <h3>Тирамису</h3>
+                        <p class="menu-card-description">Классический рецепт, маскарпоне, эспрессо, какао</p>
+                        <div class="menu-card-footer">
+                            <span class="menu-card-price">490 ₽</span>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-card-image">🥘</div>
+                    <div class="menu-card-content">
+                        <span class="menu-card-category">Супы</span>
+                        <h3>Бульон с пельменями</h3>
+                        <p class="menu-card-description">Насыщенный бульон, домашние пельмени, зелень</p>
+                        <div class="menu-card-footer">
+                            <span class="menu-card-price">390 ₽</span>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="section" id="booking">
+        <div class="container">
+            <div class="section-header">
+                <h2>Бронирование столиков</h2>
+                <p>Выберите удобную дату, время и столик в одном из наших залов</p>
+            </div>
             <div class="booking-section">
                 <div class="booking-header">
-                    <h2>Бронирование столиков</h2>
+                    <h2>
+                        <i class="fas fa-calendar-alt"></i>
+                        Выберите дату и время
+                    </h2>
                     <div class="date-selector">
-                        <label for="bookingDate">Дата:</label>
+                        <label for="bookingDate">
+                            <i class="fas fa-calendar"></i>
+                        </label>
                         <input type="date" id="bookingDate" onchange="loadHallMap()">
-                        <label for="bookingTime">Время:</label>
+                        <label for="bookingTime">
+                            <i class="fas fa-clock"></i>
+                        </label>
                         <select id="bookingTime" onchange="loadHallMap()">
                             <option value="12:00">12:00</option>
                             <option value="13:00">13:00</option>
@@ -47,7 +701,7 @@
                             <option value="16:00">16:00</option>
                             <option value="17:00">17:00</option>
                             <option value="18:00">18:00</option>
-                            <option value="19:00">19:00</option>
+                            <option value="19:00" selected>19:00</option>
                             <option value="20:00">20:00</option>
                             <option value="21:00">21:00</option>
                             <option value="22:00">22:00</option>
@@ -62,7 +716,7 @@
                     </div>
                     <div class="legend-item">
                         <span class="table-icon pending"></span>
-                        <span>Ожидает подтверждения</span>
+                        <span>Ожидает</span>
                     </div>
                     <div class="legend-item">
                         <span class="table-icon occupied"></span>
@@ -70,121 +724,401 @@
                     </div>
                     <div class="legend-item">
                         <span class="table-icon maintenance"></span>
-                        <span>На ремонте</span>
+                        <span>Ремонт</span>
                     </div>
                 </div>
 
                 <div id="zoneSelector"></div>
 
-                <div class="hall-map" id="hallMap">
-                    <!-- Столики загружаются динамически -->
-                    <div class="loading">Загрузка карты зала...</div>
+                <div class="hall-map" id="hallMap" data-zone="main">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        <p>Загрузка карты зала...</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- Модальное окно входа -->
+    <!-- Reviews Section -->
+    <section class="section" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2>Отзывы гостей</h2>
+                <p>Что говорят о нас наши посетители</p>
+            </div>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">А</div>
+                        <div class="review-info">
+                            <h4>Анна Петрова</h4>
+                            <div class="review-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Превосходный ресторан! Праздновали здесь годовщину свадьбы. Атмосфера волшебная, еда — настоящий праздник вкуса. Стейк Рибай — лучший в городе!"</p>
+                    <p class="review-date">15 марта 2026</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">Д</div>
+                        <div class="review-info">
+                            <h4>Дмитрий Козлов</h4>
+                            <div class="review-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Привёл партнёров на деловой ужин. Всё прошло идеально: отличное вино, изысканная кухня, ненавязчивое обслуживание. Обязательно вернусь!"</p>
+                    <p class="review-date">8 марта 2026</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">Е</div>
+                        <div class="review-info">
+                            <h4>Елена Смирнова</h4>
+                            <div class="review-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Праздновали день рождения компании. Заказали банкет на 30 человек — всё было великолепно! Отдельное спасибо за живой джаз!"</p>
+                    <p class="review-date">1 марта 2026</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section" id="map">
+        <div class="container">
+            <div class="section-header">
+                <h2>Как нас найти</h2>
+                <p>Мы находимся в историческом центре города</p>
+            </div>
+            <div class="map-container">
+                <div class="map-info">
+                    <div class="map-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Адрес</h4>
+                            <p>ул. Ратушная, 15, Москва, 101000</p>
+                        </div>
+                    </div>
+                    <div class="map-transport">
+                        <h4>Как добраться</h4>
+                        <div class="transport-item">
+                            <i class="fas fa-subway"></i>
+                            <span>Метро «Китай-город» — 5 минут пешком</span>
+                        </div>
+                        <div class="transport-item">
+                            <i class="fas fa-bus"></i>
+                            <span>Автобусы 122, 158 — остановка «Ратушная площадь»</span>
+                        </div>
+                        <div class="transport-item">
+                            <i class="fas fa-car"></i>
+                            <span>Парковка на 20 мест (бесплатно для гостей)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-embed">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.371!2d37.6173!3d55.7558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDQ1JzIwLjkiTiAzN8KwMzcnMDIuMyJF!5e0!3m2!1sru!2sru!4v1600000000000!5m2!1sru!2sru" 
+                        width="100%" 
+                        height="400" 
+                        style="border:0; border-radius: var(--radius-xl);" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">🏛️</div>
+                        <h1>У Ратуши</h1>
+                    </a>
+                    <p>Изысканная европейская кухня в историческом центре города с 2010 года.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="#" aria-label="VK"><i class="fab fa-vk"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Навигация</h4>
+                    <div class="footer-links">
+                        <a href="#about">О нас</a>
+                        <a href="#menu">Меню</a>
+                        <a href="#booking">Бронирование</a>
+                        <a href="#reviews">Отзывы</a>
+                        <a href="#gallery">Галерея</a>
+                        <a href="#faq">FAQ</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Услуги</h4>
+                    <div class="footer-links">
+                        <a href="#private">Банкеты</a>
+                        <a href="#events">Мероприятия</a>
+                        <a href="#">Кейтеринг</a>
+                        <a href="#">Программа лояльности</a>
+                        <a href="#">Подарочные сертификаты</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Контакты</h4>
+                    <div class="footer-links">
+                        <a href="tel:+74951234567"><i class="fas fa-phone"></i> +7 (495) 123-45-67</a>
+                        <a href="mailto:info@uratushi.ru"><i class="fas fa-envelope"></i> info@uratushi.ru</a>
+                        <a href="#map"><i class="fas fa-map-marker-alt"></i> ул. Ратушная, 15</a>
+                        <a href="#"><i class="fas fa-clock"></i> Пн-Чт: 12:00-23:00</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Публичная оферта</a>
+                    <a href="#">Карта сайта</a>
+                </div>
+                <p>© 2026 У Ратуши. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Вход в систему</h3>
-                <button class="modal-close" onclick="hideModal('loginModal')">&times;</button>
+                <h3>
+                    <i class="fas fa-sign-in-alt"></i>
+                    Вход в систему
+                </h3>
+                <button class="modal-close" onclick="hideModal('loginModal')">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required>
+                    <label for="loginEmail">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Пароль</label>
-                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword">
+                        <i class="fas fa-lock"></i>
+                        Пароль
+                    </label>
+                    <input type="password" id="loginPassword" placeholder="Введите пароль" required>
                 </div>
                 <div class="form-error" id="loginError"></div>
-                <button type="submit" class="btn btn-primary btn-block">Войти</button>
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Модальное окно регистрации -->
+    <!-- Register Modal -->
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Регистрация</h3>
-                <button class="modal-close" onclick="hideModal('registerModal')">&times;</button>
+                <h3>
+                    <i class="fas fa-user-plus"></i>
+                    Регистрация
+                </h3>
+                <button class="modal-close" onclick="hideModal('registerModal')">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <form id="registerForm" onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" required>
+                    <label for="registerEmail">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">Пароль</label>
-                    <input type="password" id="registerPassword" required minlength="6">
+                    <label for="registerPassword">
+                        <i class="fas fa-lock"></i>
+                        Пароль
+                    </label>
+                    <input type="password" id="registerPassword" placeholder="Минимум 6 символов" minlength="6" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerName">Имя</label>
-                    <input type="text" id="registerName" required>
+                    <label for="registerName">
+                        <i class="fas fa-user"></i>
+                        Имя
+                    </label>
+                    <input type="text" id="registerName" placeholder="Ваше имя" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPhone">Телефон</label>
-                    <input type="tel" id="registerPhone" required>
+                    <label for="registerPhone">
+                        <i class="fas fa-phone"></i>
+                        Телефон
+                    </label>
+                    <input type="tel" id="registerPhone" placeholder="+7 (999) 123-45-67" required>
                 </div>
                 <div class="form-error" id="registerError"></div>
-                <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    <i class="fas fa-user-plus"></i>
+                    Зарегистрироваться
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Модальное окно бронирования -->
+    <!-- Booking Modal -->
     <div class="modal" id="bookingModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Бронирование столика</h3>
-                <button class="modal-close" onclick="hideModal('bookingModal')">&times;</button>
+                <h3>
+                    <i class="fas fa-chair"></i>
+                    Бронирование столика
+                </h3>
+                <button class="modal-close" onclick="hideModal('bookingModal')">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <form id="bookingForm" onsubmit="handleBooking(event)">
                 <div class="booking-info">
-                    <p><strong>Столик №<span id="bookingTableNumber"></span></strong></p>
-                    <p>Дата: <span id="bookingDateDisplay"></span></p>
-                    <p>Время: <span id="bookingTimeDisplay"></span></p>
-                    <p>Мест: <span id="bookingTableSeats"></span></p>
+                    <p><strong><i class="fas fa-hashtag"></i> Столик №<span id="bookingTableNumber"></span></strong></p>
+                    <p><i class="fas fa-calendar-day"></i> <span id="bookingDateDisplay"></span></p>
+                    <p><i class="fas fa-clock"></i> <span id="bookingTimeDisplay"></span></p>
+                    <p><i class="fas fa-users"></i> <span id="bookingTableSeats"></span> мест</p>
                 </div>
                 <input type="hidden" id="bookingTableId">
                 <div class="form-group">
-                    <label for="bookingGuestName">Имя</label>
-                    <input type="text" id="bookingGuestName" required>
+                    <label for="bookingGuestName">
+                        <i class="fas fa-user"></i>
+                        Ваше имя
+                    </label>
+                    <input type="text" id="bookingGuestName" placeholder="Как вас представить?" required>
                 </div>
                 <div class="form-group">
-                    <label for="bookingGuestPhone">Телефон</label>
-                    <input type="tel" id="bookingGuestPhone" required>
+                    <label for="bookingGuestPhone">
+                        <i class="fas fa-phone"></i>
+                        Телефон
+                    </label>
+                    <input type="tel" id="bookingGuestPhone" placeholder="+7 (999) 123-45-67" required>
                 </div>
                 <div class="form-group">
-                    <label for="bookingDuration">Длительность (часов)</label>
+                    <label for="bookingDuration">
+                        <i class="fas fa-hourglass-half"></i>
+                        Длительность
+                    </label>
                     <select id="bookingDuration">
                         <option value="2">2 часа</option>
-                        <option value="3">3 часа</option>
+                        <option value="3" selected>3 часа</option>
                         <option value="4">4 часа</option>
                         <option value="5">5 часов</option>
                         <option value="6">6 часов</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="bookingNotes">Пожелания</label>
-                    <textarea id="bookingNotes" rows="3" placeholder="Особые пожелания к бронированию..."></textarea>
+                    <label for="bookingNotes">
+                        <i class="fas fa-comment"></i>
+                        Пожелания
+                    </label>
+                    <textarea id="bookingNotes" rows="3" placeholder="Особые пожелания..."></textarea>
                 </div>
                 <div class="form-error" id="bookingError"></div>
-                <button type="submit" class="btn btn-primary btn-block">Забронировать</button>
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    <i class="fas fa-check"></i>
+                    Забронировать
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Уведомление -->
+    <!-- Notification -->
     <div class="notification" id="notification"></div>
 
     <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/hall-map.js"></script>
     <script src="js/booking.js"></script>
+    <script>
+        // Theme toggle functionality
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            const darkBtn = document.getElementById('darkThemeBtn');
+            const lightBtn = document.getElementById('lightThemeBtn');
+            
+            if (theme === 'dark') {
+                darkBtn.classList.add('active');
+                lightBtn.classList.remove('active');
+            } else {
+                darkBtn.classList.remove('active');
+                lightBtn.classList.add('active');
+            }
+        }
+        
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            setTheme(savedTheme);
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        });
+        
+        // Close modals on escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    activeModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+        
+        // Newsletter form handler
+        function handleNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input').value;
+            showNotification('success', 'Спасибо за подписку! Мы отправим новости на ' + email);
+            event.target.reset();
+        }
+    </script>
 </body>
 </html>
