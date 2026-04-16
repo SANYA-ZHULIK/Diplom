@@ -256,6 +256,9 @@ function onTableClick(tableId, status) {
         document.getElementById('bookingTableId').value = tableId;
         document.getElementById('bookingTableNumber').textContent = table.table_number;
         document.getElementById('bookingTableSeats').textContent = table.seats;
+        document.getElementById('bookingTableMinGuests').textContent = table.min_guests || 1;
+        document.getElementById('bookingGuests').min = table.min_guests || 1;
+        document.getElementById('bookingGuests').max = table.seats;
         document.getElementById('bookingDateDisplay').textContent = formatDate(date);
         document.getElementById('bookingTimeDisplay').textContent = time;
         

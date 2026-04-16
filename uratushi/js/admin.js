@@ -5,6 +5,12 @@ var adminTables = [];
 var adminClients = [];
 var currentBookingId = null;
 var currentClientId = null;
+var adminVerified = false;
+
+function verifyAdmin() {
+    if (!currentUser || !currentProfile) return false;
+    return currentProfile.role === 'admin';
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('adminContent')) {
@@ -23,7 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function loadAdminData() {
-    if (!checkPageAccess()) return;
+    if (!checkPageAccess() || !verifyAdmin()) {
+        showNotification('Доступ запрещен', 'error');
+        return;
+    }
     
     if (!supabaseClient) {
         console.log('Supabase not ready');
@@ -45,10 +54,6 @@ function switchAdminTab(tabName) {
     var tabElement = document.getElementById(tabName + 'Tab');
     if (tabElement) tabElement.classList.add('active');
     if (event && event.target) event.target.classList.add('active');
-    
-    if (tabName === 'clients') {
-        loadClients();
-    }
 }
 
 // === УПРАВЛЕНИЕ БРОНИРОВАНИЯМИ ===
@@ -144,6 +149,7 @@ function showConfirmModal(bookingId) {
 }
 
 async function approveBooking() {
+    if (!verifyAdmin()) { showNotification('Доступ запрещен', 'error'); return; }
     if (!supabaseClient) return;
     
     try {
@@ -169,6 +175,7 @@ async function approveBooking() {
 }
 
 async function rejectBooking() {
+    if (!verifyAdmin()) { showNotification('Доступ запрещен', 'error'); return; }
     if (!supabaseClient) return;
     
     try {
@@ -201,48 +208,23 @@ function showCompleteModal(bookingId) {
 }
 
 async function completeBooking() {
+    if (!verifyAdmin()) { showNotification('Доступ запрещен', 'error'); return; }
     if (!supabaseClient) return;
     
     try {
-        var result1 = await supabaseClient
+        var result = await supabaseClient
             .from('bookings')
             .update({ status: 'completed' })
             .eq('id', currentBookingId);
         
-        if (result1.error) {
-            console.error('Ошибка завершения:', result1.error);
+        if (result.error) {
+            console.error('Ошибка завершения:', result.error);
             showNotification('Ошибка при завершении', 'error');
             return;
         }
         
-        var booking = adminBookings.find(function(b) { return b.id === currentBookingId; });
-        if (booking && booking.user_id) {
-            await supabaseClient
-                .from('bonus_history')
-                .insert({
-                    user_id: booking.user_id,
-                    amount: 10,
-                    reason: 'Бонусы за визит',
-                    created_at: new Date().toISOString()
-                });
-            
-            var profileResult = await supabaseClient
-                .from('profiles')
-                .select('bonus_balance')
-                .eq('id', booking.user_id)
-                .single();
-            
-            if (profileResult.data) {
-                var newBalance = (profileResult.data.bonus_balance || 0) + 10;
-                await supabaseClient
-                    .from('profiles')
-                    .update({ bonus_balance: newBalance })
-                    .eq('id', booking.user_id);
-            }
-        }
-        
         hideModal('completeModal');
-        showNotification('Визит отмечен! Начислено 10 бонусных баллов.', 'success');
+        showNotification('Визит отмечен', 'success');
         loadAdminBookings();
         
     } catch (err) {
@@ -254,6 +236,7 @@ async function completeBooking() {
 // === УПРАВЛЕНИЕ СТОЛИКАМИ ===
 
 async function loadAdminTables() {
+    if (!verifyAdmin()) return;
     if (!supabaseClient) return;
     
     try {
@@ -293,7 +276,7 @@ function renderAdminTables() {
                 '</span>' +
             '</div>' +
             '<div class="table-card-info">' +
-                '<p>🪑 ' + table.seats + ' мест</p>' +
+                '<p>🪑 ' + table.seats + ' мест (мин. ' + (table.min_guests || 1) + ')</p>' +
                 '<p>📍 Позиция: ' + table.position_x + '%, ' + table.position_y + '%</p>' +
             '</div>' +
             '<div class="table-card-actions">' +
@@ -312,6 +295,7 @@ function showAddTableModal() {
 }
 
 function editTable(tableId) {
+    if (!verifyAdmin()) { showNotification('Доступ запрещен', 'error'); return; }
     var table = adminTables.find(function(t) { return t.id === tableId; });
     if (!table) return;
     
@@ -319,6 +303,7 @@ function editTable(tableId) {
     document.getElementById('tableId').value = table.id;
     document.getElementById('tableNumber').value = table.table_number;
     document.getElementById('tableSeats').value = table.seats;
+    document.getElementById('tableMinGuests').value = table.min_guests || 1;
     document.getElementById('tableX').value = table.position_x;
     document.getElementById('tableY').value = table.position_y;
     document.getElementById('tableStatus').value = table.status;
@@ -328,12 +313,14 @@ function editTable(tableId) {
 
 async function handleTableSave(event) {
     event.preventDefault();
+    if (!verifyAdmin()) { showNotification('Доступ запрещен', 'error'); return; }
     if (!supabaseClient) return;
     
     var tableId = document.getElementById('tableId').value;
     var tableData = {
         table_number: parseInt(document.getElementById('tableNumber').value),
         seats: parseInt(document.getElementById('tableSeats').value),
+        min_guests: parseInt(document.getElementById('tableMinGuests').value) || 1,
         position_x: parseInt(document.getElementById('tableX').value),
         position_y: parseInt(document.getElementById('tableY').value),
         status: document.getElementById('tableStatus').value
@@ -370,6 +357,7 @@ async function handleTableSave(event) {
 }
 
 async function deleteTable(tableId) {
+    if (!verifyAdmin()) { showNotification('Доступ запрещен', 'error'); return; }
     if (!confirm('Вы уверены, что хотите удалить этот столик?')) return;
     if (!supabaseClient) return;
     
@@ -387,112 +375,6 @@ async function deleteTable(tableId) {
         
         showNotification('Столик удален', 'success');
         loadAdminTables();
-        
-    } catch (err) {
-        console.error('Ошибка:', err);
-        showNotification('Произошла ошибка', 'error');
-    }
-}
-
-// === УПРАВЛЕНИЕ КЛИЕНТАМИ И БОНУСАМИ ===
-
-async function loadClients() {
-    if (!supabaseClient) return;
-    
-    var search = document.getElementById('clientSearch') && document.getElementById('clientSearch').value;
-    
-    try {
-        var query = supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('role', 'user')
-            .order('full_name', { ascending: true });
-        
-        if (search) {
-            query = query.or('full_name.ilike.%' + search + '%,email.ilike.%' + search + '%');
-        }
-        
-        var result = await query;
-        
-        if (result.error) {
-            console.error('Ошибка загрузки клиентов:', result.error);
-            return;
-        }
-        
-        adminClients = result.data || [];
-        renderClients();
-        
-    } catch (err) {
-        console.error('Ошибка:', err);
-    }
-}
-
-function renderClients() {
-    var list = document.getElementById('clientsList');
-    if (!list) return;
-    
-    if (adminClients.length === 0) {
-        list.innerHTML = '<div class="loading">Нет клиентов</div>';
-        return;
-    }
-    
-    list.innerHTML = adminClients.map(function(client) {
-        return '<div class="client-card">' +
-            '<div class="client-info">' +
-                '<h4>' + (client.full_name || 'Без имени') + '</h4>' +
-                '<p>' + client.email + '</p>' +
-            '</div>' +
-            '<div class="client-bonus">' + (client.bonus_balance || 0) + ' баллов</div>' +
-            '<button class="btn btn-outline btn-sm" onclick="showBonusModal(\'' + client.id + '\')">Изменить баллы</button>' +
-        '</div>';
-    }).join('');
-}
-
-function showBonusModal(clientId) {
-    currentClientId = clientId;
-    var client = adminClients.find(function(c) { return c.id === clientId; });
-    if (!client) return;
-    
-    var info = document.getElementById('bonusClientInfo');
-    info.innerHTML = 
-        '<p><strong>Клиент:</strong> ' + (client.full_name || 'Без имени') + '</p>' +
-        '<p><strong>Email:</strong> ' + client.email + '</p>' +
-        '<p><strong>Текущий баланс:</strong> ' + (client.bonus_balance || 0) + ' баллов</p>';
-    
-    document.getElementById('bonusClientId').value = clientId;
-    document.getElementById('bonusForm').reset();
-    showModal('bonusModal');
-}
-
-async function handleBonusUpdate(event) {
-    event.preventDefault();
-    if (!supabaseClient) return;
-    
-    var amount = parseInt(document.getElementById('bonusAmount').value);
-    var reason = document.getElementById('bonusReason').value.trim();
-    
-    try {
-        await supabaseClient
-            .from('bonus_history')
-            .insert({
-                user_id: currentClientId,
-                amount: amount,
-                reason: reason,
-                created_at: new Date().toISOString()
-            });
-        
-        var client = adminClients.find(function(c) { return c.id === currentClientId; });
-        if (client) {
-            var newBalance = Math.max(0, (client.bonus_balance || 0) + amount);
-            await supabaseClient
-                .from('profiles')
-                .update({ bonus_balance: newBalance })
-                .eq('id', currentClientId);
-        }
-        
-        hideModal('bonusModal');
-        showNotification('Баллы ' + (amount > 0 ? 'начислены' : 'списаны') + ' успешно', 'success');
-        loadClients();
         
     } catch (err) {
         console.error('Ошибка:', err);

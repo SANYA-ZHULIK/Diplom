@@ -1013,7 +1013,7 @@
                     <p><strong><i class="fas fa-hashtag"></i> Столик №<span id="bookingTableNumber"></span></strong></p>
                     <p><i class="fas fa-calendar-day"></i> <span id="bookingDateDisplay"></span></p>
                     <p><i class="fas fa-clock"></i> <span id="bookingTimeDisplay"></span></p>
-                    <p><i class="fas fa-users"></i> <span id="bookingTableSeats"></span> мест</p>
+                    <p><i class="fas fa-users"></i> <span id="bookingTableSeats"></span> мест (мин. <span id="bookingTableMinGuests"></span>)</p>
                 </div>
                 <input type="hidden" id="bookingTableId">
                 <div class="form-group">
@@ -1029,6 +1029,13 @@
                         Телефон
                     </label>
                     <input type="tel" id="bookingGuestPhone" placeholder="+7 (999) 123-45-67" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingGuests">
+                        <i class="fas fa-users"></i>
+                        Количество гостей
+                    </label>
+                    <input type="number" id="bookingGuests" value="2" min="1" max="20" required>
                 </div>
                 <div class="form-group">
                     <label for="bookingDuration">

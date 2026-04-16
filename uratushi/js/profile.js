@@ -1,7 +1,6 @@
 // === ЛИЧНЫЙ КАБИНЕТ ===
 
 var userBookings = [];
-var userBonuses = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('profileContent')) {
@@ -23,14 +22,11 @@ async function loadProfileData() {
     
     var profileNameEl = document.getElementById('profileName');
     var profileEmailEl = document.getElementById('profileEmail');
-    var bonusBalanceEl = document.getElementById('bonusBalance');
     
     if (profileNameEl) profileNameEl.textContent = currentProfile && currentProfile.full_name ? currentProfile.full_name : 'Пользователь';
     if (profileEmailEl) profileEmailEl.textContent = currentUser.email;
-    if (bonusBalanceEl) bonusBalanceEl.textContent = currentProfile && currentProfile.bonus_balance !== null ? currentProfile.bonus_balance : 0;
     
     await loadUserBookings();
-    await loadBonusHistory();
 }
 
 async function loadUserBookings() {
@@ -106,57 +102,11 @@ function renderBookingsList(elementId, bookings, showActions) {
             '</div>' +
             (canCancel ? 
                 '<div class="booking-actions">' +
-                    '<button class="btn btn-outline btn-sm" onclick="showCancelModal(' + booking.id + ')">' +
+                    '<button class="btn btn-outline btn-sm" onclick="showCancelModal(' + booking.id + ', \'' + booking.user_id + '\')">' +
                         'Отменить' +
                     '</button>' +
                 '</div>' : ''
             ) +
-        '</div>';
-    }).join('');
-}
-
-async function loadBonusHistory() {
-    if (!supabaseClient || !currentUser) return;
-    
-    try {
-        var result = await supabaseClient
-            .from('bonus_history')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false });
-        
-        if (result.error) {
-            console.error('Ошибка загрузки истории бонусов:', result.error);
-            return;
-        }
-        
-        userBonuses = result.data || [];
-        renderBonusHistory();
-        
-    } catch (err) {
-        console.error('Ошибка:', err);
-    }
-}
-
-function renderBonusHistory() {
-    var container = document.getElementById('bonusesHistory');
-    if (!container) return;
-    
-    if (userBonuses.length === 0) {
-        container.innerHTML = '<div class="loading">Нет начислений</div>';
-        return;
-    }
-    
-    container.innerHTML = userBonuses.map(function(item) {
-        var isEarned = item.amount > 0;
-        return '<div class="bonus-item ' + (isEarned ? 'earned' : 'spent') + '">' +
-            '<div class="bonus-details">' +
-                '<h4>' + item.reason + '</h4>' +
-                '<p>' + new Date(item.created_at).toLocaleDateString('ru-RU') + '</p>' +
-            '</div>' +
-            '<div class="bonus-value ' + (isEarned ? 'positive' : 'negative') + '">' +
-                (isEarned ? '+' : '') + item.amount +
-            '</div>' +
         '</div>';
     }).join('');
 }

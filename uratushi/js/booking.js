@@ -18,6 +18,7 @@ async function handleBooking(event) {
     var tableId = document.getElementById('bookingTableId').value;
     var date = document.getElementById('bookingDate').value;
     var time = document.getElementById('bookingTime').value;
+    var guests = parseInt(document.getElementById('bookingGuests').value);
     var duration = parseInt(document.getElementById('bookingDuration').value);
     var guestName = document.getElementById('bookingGuestName').value.trim();
     var guestPhone = document.getElementById('bookingGuestPhone').value.trim();
@@ -28,6 +29,19 @@ async function handleBooking(event) {
     
     if (!guestName || !guestPhone) {
         errorElement.textContent = 'Пожалуйста, заполните все обязательные поля';
+        return;
+    }
+    
+    var minGuests = parseInt(document.getElementById('bookingGuests').min) || 1;
+    var maxGuests = parseInt(document.getElementById('bookingGuests').max) || 20;
+    
+    if (guests < minGuests) {
+        errorElement.textContent = 'Минимальное количество гостей: ' + minGuests;
+        return;
+    }
+    
+    if (guests > maxGuests) {
+        errorElement.textContent = 'Максимальное количество гостей: ' + maxGuests;
         return;
     }
     
@@ -61,6 +75,7 @@ async function handleBooking(event) {
             table_id: parseInt(tableId),
             booking_date: date,
             booking_time: time,
+            guest_count: guests,
             end_time: endTime,
             duration: duration,
             guest_name: guestName,
@@ -93,9 +108,14 @@ async function handleBooking(event) {
     }
 }
 
-async function cancelBooking(bookingId) {
+async function cancelBooking(bookingId, userId) {
     if (!supabaseClient) {
         showNotification('Ошибка: База данных не подключена', 'error');
+        return;
+    }
+    
+    if (currentUser && userId && currentUser.id !== userId) {
+        showNotification('Вы можете отменить только свое бронирование', 'error');
         return;
     }
     
@@ -113,6 +133,12 @@ async function cancelBooking(bookingId) {
         }
         
         var booking = getResult.data;
+        
+        if (currentUser && currentUser.id !== booking.user_id && currentProfile.role !== 'admin') {
+            showNotification('Вы можете отменить только свое бронирование', 'error');
+            return;
+        }
+        
         var bookingDate = new Date(booking.booking_date + 'T' + booking.booking_time);
         var now = new Date();
         var hoursUntilBooking = (bookingDate - now) / (1000 * 60 * 60);
@@ -146,8 +172,12 @@ async function cancelBooking(bookingId) {
     }
 }
 
-function showCancelModal(bookingId) {
+function showCancelModal(bookingId, userId, isAdmin) {
     var confirmBtn = document.getElementById('confirmCancelBtn');
+    if (currentProfile && currentProfile.role !== 'admin' && userId && currentUser && currentUser.id !== userId) {
+        showNotification('Вы можете отменить только свое бронирование', 'error');
+        return;
+    }
     confirmBtn.onclick = function() { cancelBooking(bookingId); };
     showModal('cancelModal');
 }
