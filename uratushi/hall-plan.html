@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировка зала — Ресторан «У Ратуши»</title>
+    <link rel="stylesheet" href="css/dual-theme.css">
+    <style>
+        .plan-container {
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+        }
+        
+        .plan-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .plan-header h1 {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            margin-bottom: 10px;
+        }
+        
+        .plan-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .plan-meta-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: 15px 25px;
+            text-align: center;
+        }
+        
+        .plan-meta-item .value {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+        
+        .plan-meta-item .label {
+            font-size: var(--text-sm);
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        
+        .plan-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .plan-section h2 {
+            font-size: var(--text-xl);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .plan-section h2 i {
+            color: var(--accent-primary);
+        }
+        
+        .plan-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .plan-controls button {
+            padding: 10px 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-secondary);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-body);
+        }
+        
+        .plan-controls button:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-elevated);
+        }
+        
+        .plan-controls button.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+        
+        .svg-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            background: var(--bg-tertiary);
+        }
+        
+        .svg-container svg {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .legend-inline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .legend-section h3 {
+            font-size: var(--text-base);
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 0;
+        }
+        
+        .legend-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            flex-shrink: 0;
+        }
+        
+        .legend-text {
+            flex: 1;
+        }
+        
+        .legend-text .name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .legend-text .desc {
+            font-size: var(--text-sm);
+            color: var(--text-muted);
+        }
+        
+        .collision-alerts {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--status-occupied);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+        
+        .collision-alerts h3 {
+            color: var(--status-occupied);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .collision-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+        
+        .collision-item.warning {
+            border-left: 3px solid var(--status-pending);
+        }
+        
+        .collision-item.error {
+            border-left: 3px solid var(--status-occupied);
+        }
+        
+        .collision-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .collision-item.warning .collision-icon {
+            background: rgba(234, 179, 8, 0.2);
+            color: var(--status-pending);
+        }
+        
+        .collision-item.error .collision-icon {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--status-occupied);
+        }
+        
+        .collision-content {
+            flex: 1;
+        }
+        
+        .collision-content strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        .collision-content p {
+            font-size: var(--text-sm);
+            margin: 0;
+        }
+        
+        .zone-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .zone-card {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            border-left: 4px solid;
+        }
+        
+        .zone-card.stage { border-color: #a855f7; }
+        .zone-card.dining { border-color: #22c55e; }
+        .zone-card.bar { border-color: #f59e0b; }
+        .zone-card.kitchen { border-color: #ef4444; }
+        .zone-card.dance { border-color: #ec4899; }
+        .zone-card.facilities { border-color: #06b6d4; }
+        
+        .zone-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .zone-card ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+        
+        .zone-card li {
+            margin-bottom: 5px;
+        }
+        
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .safety-item {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .safety-item i {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+        }
+        
+        .safety-item h4 {
+            margin-bottom: 10px;
+        }
+        
+        .safety-item p {
+            font-size: var(--text-sm);
+            margin: 0;
+        }
+        
+        .download-section {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+        }
+        
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #8b5cf6 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            transition: all var(--transition-fast);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+        }
+        
+        .download-btn.secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-secondary);
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .summary-table th,
+        .summary-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .summary-table th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .summary-table td {
+            color: var(--text-primary);
+        }
+        
+        .summary-table tr:hover td {
+            background: var(--bg-tertiary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🏛️</div>
+                <h1>У Ратуши</h1>
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Главная</span>
+                </a>
+                <a href="hall-plan.html" class="nav-link active">
+                    <i class="fas fa-map"></i>
+                    <span>Планировка</span>
+                </a>
+                <a href="index.html#booking" class="nav-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Бронирование</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="plan-container">
+        <div class="plan-header">
+            <h1>Планировка зала ресторана</h1>
+            <p style="color: var(--text-secondary);">Интерактивная схема с проверкой столкновений и норм безопасности</p>
+            
+            <div class="plan-meta">
+                <div class="plan-meta-item">
+                    <div class="value">1:50</div>
+                    <div class="label">Масштаб</div>
+                </div>
+                <div class="plan-meta-item">
+                    <div class="value">28×20 м</div>
+                    <div class="label">Размеры зала</div>
+                </div>
+                <div class="plan-meta-item">
+                    <div class="value">560 м²</div>
+                    <div class="label">Общая площадь</div>
+                </div>
+                <div class="plan-meta-item">
+                    <div class="value">32</div>
+                    <div class="label">Посадочных мест</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Интерактивная SVG карта -->
+        <div class="plan-section">
+            <h2><i class="fas fa-drafting-compass"></i> Интерактивная схема зала</h2>
+            
+            <div class="plan-controls">
+                <button class="active" onclick="toggleLayer('all')">Показать всё</button>
+                <button onclick="toggleLayer('furniture')">Только мебель</button>
+                <button onclick="toggleLayer('zones')">Только зоны</button>
+                <button onclick="toggleLayer('safety')">Безопасность</button>
+                <button onclick="toggleLayer('grid')">Сетка</button>
+                <button onclick="toggleWarnings()">Предупреждения</button>
+            </div>
+            
+            <div class="svg-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200">
+    <defs>
+        <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.15"/>
+        </pattern>
+        <pattern id="gridPatternMajor" width="200" height="200" patternUnits="userSpaceOnUse">
+            <path d="M 200 0 L 0 0 0 200" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.3"/>
+        </pattern>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/>
+        </filter>
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        
+        <!-- Градиенты для столов -->
+        <linearGradient id="tableGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4d3f34"/>
+            <stop offset="100%" style="stop-color:#2a1f18"/>
+        </linearGradient>
+        <linearGradient id="chairGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#6a5a4a"/>
+            <stop offset="100%" style="stop-color:#3a2a1a"/>
+        </linearGradient>
+    </defs>
+                    
+                    <style>
+        /* Стили столов для SVG */
+        .table-svg {
+            transition: transform 0.2s ease;
+        }
+        .table-svg:hover {
+            transform: scale(1.1);
+        }
+        .table-body-svg {
+            fill: url(#tableGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .table-body-svg.available {
+            stroke: #22c55e;
+            filter: drop-shadow(0 4px 12px rgba(34, 197, 94, 0.4));
+        }
+        .table-body-svg.occupied {
+            stroke: #ef4444;
+            filter: drop-shadow(0 4px 12px rgba(239, 68, 68, 0.4));
+        }
+        .table-body-svg.pending {
+            stroke: #eab308;
+            filter: drop-shadow(0 4px 12px rgba(234, 179, 8, 0.4));
+        }
+        .chair-svg {
+            fill: #5a4a3a;
+            stroke: #6a5a4a;
+            stroke-width: 2;
+        }
+        .table-number-svg {
+            fill: white;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        .table-number-svg.vip {
+            fill: #f59e0b;
+        }
+    </style>
+    
+    <!-- Фон -->
+                    <rect x="0" y="0" width="1600" height="1200" fill="#0f0f18"/>
+                    <rect x="100" y="100" width="1400" height="1000" fill="url(#gridPattern)"/>
+                    <rect x="100" y="100" width="1400" height="1000" fill="url(#gridPatternMajor)"/>
+                    
+                    <!-- Сетка координат -->
+                    <g id="grid-layer" fill="#666" font-size="10">
+                        <line x1="100" y1="50" x2="100" y2="1150" stroke="#444" stroke-width="1"/>
+                        <line x1="50" y1="100" x2="1550" y2="100" stroke="#444" stroke-width="1"/>
+                        <text x="100" y="45" text-anchor="middle" fill="#888">X</text>
+                        <text x="45" y="105" fill="#888" transform="rotate(-90, 45, 105)">Y</text>
+                    </g>
+                    
+                    <!-- Зоны -->
+                    <g id="zones-layer">
+                        <!-- Основной зал -->
+                        <rect x="100" y="100" width="1400" height="1000" fill="#2d2d44" fill-opacity="0.2" stroke="#6366f1" stroke-width="1" stroke-dasharray="5,5"/>
+                        <!-- Бар -->
+                        <rect x="900" y="900" width="600" height="200" fill="#4a3f35" fill-opacity="0.3" stroke="#f59e0b" stroke-width="2"/>
+                        <!-- Сцена -->
+                        <rect x="100" y="100" width="500" height="200" fill="#4a4060" fill-opacity="0.3" stroke="#a855f7" stroke-width="2"/>
+                        <!-- Кухня -->
+                        <rect x="700" y="100" width="500" height="200" fill="#3d3530" fill-opacity="0.3" stroke="#ef4444" stroke-width="2"/>
+                        <!-- Танцпол -->
+                        <rect x="600" y="500" width="300" height="300" fill="#1a0a2e" fill-opacity="0.3" stroke="#ec4899" stroke-width="2" stroke-dasharray="10,5"/>
+                    </g>
+                    
+                    <!-- Стены -->
+                    <g id="walls-layer" stroke-linecap="round">
+                        <line x1="100" y1="100" x2="1500" y2="100" stroke="#fff" stroke-width="6"/>
+                        <line x1="1500" y1="100" x2="1500" y2="1100" stroke="#fff" stroke-width="6"/>
+                        <line x1="1500" y1="1100" x2="100" y2="1100" stroke="#fff" stroke-width="6"/>
+                        <line x1="100" y1="1100" x2="100" y2="100" stroke="#fff" stroke-width="6"/>
+                        <!-- Внутренние стены -->
+                        <line x1="700" y1="100" x2="700" y2="300" stroke="#888" stroke-width="3"/>
+                        <line x1="600" y1="100" x2="600" y2="300" stroke="#888" stroke-width="3"/>
+                        <line x1="1300" y1="100" x2="1300" y2="300" stroke="#888" stroke-width="3"/>
+                        <!-- Колонны -->
+                        <circle cx="500" cy="500" r="15" fill="#555" stroke="#777"/>
+                        <circle cx="1000" cy="500" r="15" fill="#555" stroke="#777"/>
+                        <circle cx="500" cy="800" r="15" fill="#555" stroke="#777"/>
+                        <circle cx="1000" cy="800" r="15" fill="#555" stroke="#777"/>
+                    </g>
+                    
+                    <!-- Входы -->
+                    <g id="entrances-layer">
+                        <rect x="1240" y="1020" width="120" height="80" fill="#1e1e2a" stroke="#22c55e" stroke-width="3"/>
+                        <text x="1300" y="1055" text-anchor="middle" fill="#22c55e" font-size="10">ВХОД</text>
+                        <rect x="0" y="550" width="60" height="100" fill="#1e1e2a" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+                        <text x="30" y="600" fill="#22c55e" font-size="8" transform="rotate(-90, 30, 600)">ВЫХОД</text>
+                    </g>
+                    
+                    <!-- Мебель - Столы со стульями -->
+                    <g id="furniture-layer" class="table-svg" filter="url(#shadow)">
+                        <!-- T-01: Круглый стол на 2 персоны -->
+                        <g transform="translate(300, 450)">
+                            <!-- Стулья -->
+                            <circle cx="0" cy="-50" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="50" r="12" class="chair-svg"/>
+                            <!-- Стол -->
+                            <circle r="35" class="table-body-svg available"/>
+                            <text class="table-number-svg">1</text>
+                        </g>
+                        
+                        <!-- T-02: Круглый стол на 4 персоны -->
+                        <g transform="translate(420, 450)">
+                            <!-- Стулья -->
+                            <circle cx="0" cy="-60" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="60" r="12" class="chair-svg"/>
+                            <circle cx="-60" cy="0" r="12" class="chair-svg"/>
+                            <circle cx="60" cy="0" r="12" class="chair-svg"/>
+                            <!-- Стол -->
+                            <circle r="48" class="table-body-svg available"/>
+                            <text class="table-number-svg">2</text>
+                        </g>
+                        
+                        <!-- T-03: Прямоугольный стол на 4 персоны -->
+                        <g transform="translate(540, 450)">
+                            <!-- Стулья -->
+                            <rect x="-20" y="-70" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="60" y="-70" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-20" y="52" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="60" y="52" width="24" height="18" rx="4" class="chair-svg"/>
+                            <!-- Стол -->
+                            <rect x="-55" y="-35" width="110" height="70" rx="8" class="table-body-svg available"/>
+                            <text class="table-number-svg" dy="3">3</text>
+                        </g>
+                        
+                        <!-- T-04: Круглый стол на 2 персоны -->
+                        <g transform="translate(300, 560)">
+                            <circle cx="0" cy="-50" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="50" r="12" class="chair-svg"/>
+                            <circle r="35" class="table-body-svg available"/>
+                            <text class="table-number-svg">4</text>
+                        </g>
+                        
+                        <!-- T-05: Прямоугольный стол на 4 персоны -->
+                        <g transform="translate(420, 560)">
+                            <rect x="-20" y="-70" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="60" y="-70" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-20" y="52" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="60" y="52" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-55" y="-35" width="110" height="70" rx="8" class="table-body-svg available"/>
+                            <text class="table-number-svg" dy="3">5</text>
+                        </g>
+                        
+                        <!-- T-06: Большой прямоугольный стол на 6 персон -->
+                        <g transform="translate(750, 450)">
+                            <!-- Стулья по бокам -->
+                            <rect x="-25" y="-80" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="3" y="-80" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-25" y="62" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="3" y="62" width="22" height="18" rx="4" class="chair-svg"/>
+                            <!-- Стол -->
+                            <rect x="-70" y="-40" width="140" height="80" rx="8" class="table-body-svg available"/>
+                            <text class="table-number-svg" dy="3">6</text>
+                        </g>
+                        
+                        <!-- T-07: Круглый стол на 4 персоны -->
+                        <g transform="translate(880, 450)">
+                            <circle cx="0" cy="-60" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="60" r="12" class="chair-svg"/>
+                            <circle cx="-60" cy="0" r="12" class="chair-svg"/>
+                            <circle cx="60" cy="0" r="12" class="chair-svg"/>
+                            <circle r="48" class="table-body-svg available"/>
+                            <text class="table-number-svg">7</text>
+                        </g>
+                        
+                        <!-- T-08: Прямоугольный стол на 4 персоны -->
+                        <g transform="translate(750, 560)">
+                            <rect x="-20" y="-70" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="60" y="-70" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-20" y="52" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="60" y="52" width="24" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-55" y="-35" width="110" height="70" rx="8" class="table-body-svg available"/>
+                            <text class="table-number-svg" dy="3">8</text>
+                        </g>
+                        
+                        <!-- T-09: Круглый стол на 4 персоны -->
+                        <g transform="translate(880, 560)">
+                            <circle cx="0" cy="-60" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="60" r="12" class="chair-svg"/>
+                            <circle cx="-60" cy="0" r="12" class="chair-svg"/>
+                            <circle cx="60" cy="0" r="12" class="chair-svg"/>
+                            <circle r="48" class="table-body-svg available"/>
+                            <text class="table-number-svg">9</text>
+                        </g>
+                        
+                        <!-- T-10: VIP круглый стол на 6 персон -->
+                        <g transform="translate(1150, 450)">
+                            <!-- 6 стульев вокруг -->
+                            <circle cx="0" cy="-75" r="14" class="chair-svg" style="stroke: #f59e0b; fill: url(#chairGradient)"/>
+                            <circle cx="0" cy="75" r="14" class="chair-svg" style="stroke: #f59e0b; fill: url(#chairGradient)"/>
+                            <circle cx="-75" cy="0" r="14" class="chair-svg" style="stroke: #f59e0b; fill: url(#chairGradient)"/>
+                            <circle cx="75" cy="0" r="14" class="chair-svg" style="stroke: #f59e0b; fill: url(#chairGradient)"/>
+                            <circle cx="-53" cy="-53" r="14" class="chair-svg" style="stroke: #f59e0b; fill: url(#chairGradient)"/>
+                            <circle cx="53" cy="-53" r="14" class="chair-svg" style="stroke: #f59e0b; fill: url(#chairGradient)"/>
+                            <!-- VIP стол -->
+                            <circle r="65" class="table-body-svg" style="stroke: #f59e0b; stroke-width: 4; filter: drop-shadow(0 4px 15px rgba(245, 158, 11, 0.5));"/>
+                            <text class="table-number-svg vip" font-size="16">10</text>
+                        </g>
+                        
+                        <!-- T-11: Круглый стол на 2 персоны -->
+                        <g transform="translate(1280, 400)">
+                            <circle cx="0" cy="-50" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="50" r="12" class="chair-svg"/>
+                            <circle r="35" class="table-body-svg available"/>
+                            <text class="table-number-svg">11</text>
+                        </g>
+                        
+                        <!-- T-12: Круглый стол на 2 персоны -->
+                        <g transform="translate(1280, 500)">
+                            <circle cx="0" cy="-50" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="50" r="12" class="chair-svg"/>
+                            <circle r="35" class="table-body-svg available"/>
+                            <text class="table-number-svg">12</text>
+                        </g>
+                        
+                        <!-- T-13: Прямоугольный стол на 6 персон -->
+                        <g transform="translate(200, 700)">
+                            <rect x="-25" y="-80" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="3" y="-80" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-25" y="62" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="3" y="62" width="22" height="18" rx="4" class="chair-svg"/>
+                            <rect x="-70" y="-40" width="140" height="80" rx="8" class="table-body-svg available"/>
+                            <text class="table-number-svg" dy="3">13</text>
+                        </g>
+                        
+                        <!-- T-14: Круглый стол на 4 персоны -->
+                        <g transform="translate(350, 700)">
+                            <circle cx="0" cy="-60" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="60" r="12" class="chair-svg"/>
+                            <circle cx="-60" cy="0" r="12" class="chair-svg"/>
+                            <circle cx="60" cy="0" r="12" class="chair-svg"/>
+                            <circle r="48" class="table-body-svg available"/>
+                            <text class="table-number-svg">14</text>
+                        </g>
+                        
+                        <!-- T-15: Круглый стол на 2 персоны -->
+                        <g transform="translate(500, 700)">
+                            <circle cx="0" cy="-50" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="50" r="12" class="chair-svg"/>
+                            <circle r="35" class="table-body-svg available"/>
+                            <text class="table-number-svg">15</text>
+                        </g>
+                        
+                        <!-- T-16: Круглый стол на 2 персоны -->
+                        <g transform="translate(600, 700)">
+                            <circle cx="0" cy="-50" r="12" class="chair-svg"/>
+                            <circle cx="0" cy="50" r="12" class="chair-svg"/>
+                            <circle r="35" class="table-body-svg available"/>
+                            <text class="table-number-svg">16</text>
+                        </g>
+                    </g>
+                    
+                    <!-- Диваны -->
+                    <g id="seating-layer" filter="url(#shadow)">
+                        <g transform="translate(100, 350)"><rect x="0" y="-30" width="140" height="60" fill="#4a3a5a" stroke="#a855f7" stroke-width="2" rx="8"/><text y="5" text-anchor="middle" fill="#a855f7" font-size="10" font-weight="bold">D-01</text></g>
+                        <g transform="translate(450, 500)"><rect x="-30" y="-100" width="60" height="200" fill="#4a3a5a" stroke="#a855f7" stroke-width="2" rx="8"/><text y="0" text-anchor="middle" fill="#a855f7" font-size="10" font-weight="bold" transform="rotate(-90, 0, 0)">D-02</text></g>
+                        <g transform="translate(650, 600)"><rect x="-30" y="-45" width="60" height="90" fill="#5a4a6a" stroke="#ec4899" stroke-width="2" rx="8"/><text y="5" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="bold">D-03</text></g>
+                    </g>
+                    
+                    <!-- Бар -->
+                    <g id="bar-layer" filter="url(#shadow)">
+                        <g transform="translate(1000, 1000)">
+                            <rect x="-150" y="-40" width="300" height="80" fill="#5a4a3a" stroke="#f59e0b" stroke-width="3" rx="5"/>
+                            <rect x="100" y="-40" width="80" height="180" fill="#5a4a3a" stroke="#f59e0b" stroke-width="3" rx="5"/>
+                            <text x="-50" y="5" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold">БАР</text>
+                            <circle cy="-65" r="14" fill="#4a3728" stroke="#f59e0b" stroke-width="2"/>
+                            <circle cx="-40" cy="-65" r="14" fill="#4a3728" stroke="#f59e0b" stroke-width="2"/>
+                            <circle cx="0" cy="-65" r="14" fill="#4a3728" stroke="#f59e0b" stroke-width="2"/>
+                            <circle cx="40" cy="-65" r="14" fill="#4a3728" stroke="#f59e0b" stroke-width="2"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Сцена -->
+                    <g id="stage-layer">
+                        <g transform="translate(300, 200)">
+                            <rect x="-180" y="-60" width="360" height="120" fill="#2a2540" stroke="#a855f7" stroke-width="3" rx="5"/>
+                            <text y="5" text-anchor="middle" fill="#a855f7" font-size="12" font-weight="bold">СЦЕНА</text>
+                            <ellipse cx="-120" cy="0" rx="30" ry="20" fill="#a855f7" fill-opacity="0.3"/>
+                            <ellipse cx="0" cy="0" rx="30" ry="20" fill="#ec4899" fill-opacity="0.3"/>
+                            <ellipse cx="120" cy="0" rx="30" ry="20" fill="#6366f1" fill-opacity="0.3"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Кухня -->
+                    <g id="kitchen-layer">
+                        <g transform="translate(750, 200)"><rect x="-80" y="-50" width="160" height="100" fill="#4a4a5a" stroke="#888" stroke-width="2" rx="3"/><text y="70" text-anchor="middle" fill="#888" font-size="8">ПЛИТА</text></g>
+                        <g transform="translate(920, 200)"><rect x="-35" y="-50" width="70" height="100" fill="#4a4a5a" stroke="#888" stroke-width="2" rx="3"/><text y="70" text-anchor="middle" fill="#888" font-size="8">ДУХОВКА</text></g>
+                        <g transform="translate(1050, 200)"><rect x="-35" y="-60" width="70" height="120" fill="#4a5a6a" stroke="#06b6d4" stroke-width="2" rx="3"/><text y="80" text-anchor="middle" fill="#06b6d4" font-size="8">ХОЛОДИЛЬНИК</text></g>
+                    </g>
+                    
+                    <!-- Санузлы -->
+                    <g id="facilities-layer">
+                        <g transform="translate(1400, 200)"><rect x="-70" y="-60" width="140" height="120" fill="#2a3a4a" stroke="#06b6d4" stroke-width="2" rx="3"/><text y="75" text-anchor="middle" fill="#06b6d4" font-size="10" font-weight="bold">ГАРДЕРОБ</text></g>
+                        <g transform="translate(1100, 100)"><rect x="-50" y="-25" width="100" height="50" fill="#2a3a4a" stroke="#ef4444" stroke-width="2" rx="3"/><ellipse cx="-20" cy="0" rx="12" ry="15" fill="#ddd"/><ellipse cx="20" cy="0" rx="12" ry="15" fill="#ddd"/><text y="40" text-anchor="middle" fill="#ef4444" font-size="10">М</text></g>
+                        <g transform="translate(1250, 100)"><rect x="-50" y="-25" width="100" height="50" fill="#2a3a4a" stroke="#ec4899" stroke-width="2" rx="3"/><ellipse cx="-20" cy="0" rx="12" ry="15" fill="#ddd"/><ellipse cx="20" cy="0" rx="12" ry="15" fill="#ddd"/><text y="40" text-anchor="middle" fill="#ec4899" font-size="10">Ж</text></g>
+                    </g>
+                    
+                    <!-- Танцпол -->
+                    <g id="dancefloor-layer">
+                        <g transform="translate(750, 650)">
+                            <rect x="-120" y="-120" width="240" height="240" fill="#1a0a2e" stroke="#ec4899" stroke-width="2" stroke-dasharray="10,5" rx="10"/>
+                            <text y="5" text-anchor="middle" fill="#ec4899" font-size="16" font-weight="bold" opacity="0.8">ТАНЦПОЛ</text>
+                        </g>
+                    </g>
+                    
+                    <!-- Безопасность -->
+                    <g id="safety-layer">
+                        <!-- Пути эвакуации -->
+                        <path d="M 1300 1100 L 1300 1000 Q 1300 900 1200 900 L 100 900" stroke="#22c55e" stroke-width="4" fill="none" stroke-dasharray="20,10"/>
+                        <path d="M 100 600 L 50 600 L 50 1100" stroke="#22c55e" stroke-width="4" fill="none" stroke-dasharray="20,10"/>
+                        
+                        <!-- Огнетушители -->
+                        <g transform="translate(680, 320)"><rect x="-12" y="-25" width="24" height="50" fill="#ef4444" stroke="#aa2222" stroke-width="2" rx="3"/><text y="45" text-anchor="middle" fill="#ef4444" font-size="8">ОТ</text></g>
+                        <g transform="translate(1300, 500)"><rect x="-12" y="-25" width="24" height="50" fill="#ef4444" stroke="#aa2222" stroke-width="2" rx="3"/><text y="45" text-anchor="middle" fill="#ef4444" font-size="8">ОТ</text></g>
+                        
+                        <!-- Пожарные извещатели -->
+                        <circle cx="500" cy="320" r="8" fill="#ef4444"/>
+                        <circle cx="800" cy="320" r="8" fill="#ef4444"/>
+                        <circle cx="500" cy="620" r="8" fill="#ef4444"/>
+                        <circle cx="800" cy="620" r="8" fill="#ef4444"/>
+                    </g>
+                    
+                    <!-- Предупреждения (скрыты по умолчанию) -->
+                    <g id="warnings-layer" style="display: none;">
+                        <rect x="600" y="320" width="150" height="50" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2" rx="5"/>
+                        <text x="675" y="345" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="bold">⚠ ВНИМАНИЕ</text>
+                        <text x="675" y="360" text-anchor="middle" fill="#ef4444" font-size="9">Проход &lt;1.2м</text>
+                        
+                        <text x="550" y="320" fill="#ef4444" font-size="8">Проход 1.0м &lt; нормы 1.2м</text>
+                        <text x="950" y="320" fill="#ef4444" font-size="8">Проход 1.0м &lt; нормы 1.2м</text>
+                    </g>
+                    
+                    <!-- Надписи -->
+                    <g id="labels-layer">
+                        <text x="1100" y="1030" fill="#f59e0b" font-size="24" text-anchor="middle" font-weight="bold" filter="url(#glow)">БАР</text>
+                        <text x="300" y="130" fill="#a855f7" font-size="18" text-anchor="middle">СЦЕНА</text>
+                        <text x="950" y="130" fill="#ef4444" font-size="14" text-anchor="middle">КУХНЯ</text>
+                        <text x="750" y="660" fill="#ec4899" font-size="12" text-anchor="middle" opacity="0.7">ТАНЦПОЛ</text>
+                        
+                        <!-- Размеры -->
+                        <text x="800" y="1150" text-anchor="middle" fill="#666" font-size="10">28.0 м</text>
+                        <text x="35" y="600" fill="#666" font-size="10" transform="rotate(-90, 35, 600)">20.0 м</text>
+                    </g>
+                    
+                    <!-- Легенда -->
+                    <g transform="translate(50, 50)">
+                        <rect x="-20" y="-10" width="260" height="520" fill="#1a1a25" stroke="#6366f1" stroke-width="2" rx="8"/>
+                        <text x="110" y="20" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">ЛЕГЕНДА</text>
+                        <line x1="0" y1="35" x2="220" y2="35" stroke="#444"/>
+                        
+                        <text x="10" y="60" fill="#888" font-size="10">МЕБЕЛЬ</text>
+                        <circle cx="25" cy="80" r="10" fill="#2d4a3e" stroke="#22c55e"/><text x="45" y="84" fill="#aaa" font-size="9">Стол</text>
+                        <rect x="15" y="100" width="20" height="14" fill="#4a3a5a" stroke="#a855f7" rx="3"/><text x="45" y="112" fill="#aaa" font-size="9">Диван</text>
+                        
+                        <text x="10" y="145" fill="#888" font-size="10">ЗОНЫ</text>
+                        <rect x="10" y="155" width="30" height="12" fill="#2d2d44" fill-opacity="0.3" stroke="#6366f1" stroke-dasharray="3,2"/><text x="50" y="165" fill="#aaa" font-size="9">Зал</text>
+                        <rect x="10" y="180" width="30" height="12" fill="#4a3f35" fill-opacity="0.3" stroke="#f59e0b"/><text x="50" y="190" fill="#aaa" font-size="9">Бар</text>
+                        <rect x="10" y="205" width="30" height="12" fill="#4a4060" fill-opacity="0.3" stroke="#a855f7"/><text x="50" y="215" fill="#aaa" font-size="9">Сцена</text>
+                        <rect x="10" y="230" width="30" height="12" fill="#3d3530" fill-opacity="0.3" stroke="#ef4444"/><text x="50" y="240" fill="#aaa" font-size="9">Кухня</text>
+                        <rect x="10" y="255" width="30" height="12" fill="#1a0a2e" stroke="#ec4899" stroke-dasharray="5,3"/><text x="50" y="265" fill="#aaa" font-size="9">Танцпол</text>
+                        
+                        <text x="10" y="295" fill="#888" font-size="10">БЕЗОПАСНОСТЬ</text>
+                        <line x1="10" y1="310" x2="40" y2="310" stroke="#22c55e" stroke-width="3" stroke-dasharray="10,5"/><text x="50" y="314" fill="#22c55e" font-size="9">Эвакуация</text>
+                        <circle cx="25" cy="340" r="6" fill="#ef4444"/><text x="45" y="344" fill="#aaa" font-size="9">Извещатель</text>
+                        <rect x="12" y="355" width="25" height="18" fill="#ef4444" stroke="#aa2222" rx="2"/><text x="45" y="368" fill="#aaa" font-size="9">Огнетушитель</text>
+                    </g>
+                    
+                    <!-- Техническое резюме -->
+                    <g transform="translate(1150, 50)">
+                        <rect x="-20" y="-10" width="400" height="130" fill="#1a1a25" stroke="#6366f1" stroke-width="2" rx="8"/>
+                        <text x="180" y="15" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">ТЕХНИЧЕСКОЕ РЕЗЮМЕ</text>
+                        <line x1="0" y1="30" x2="360" y2="30" stroke="#444"/>
+                        <text x="10" y="55" fill="#888" font-size="10">Проект:</text><text x="120" y="55" fill="#f8fafc" font-size="10">План зала «У Ратуши»</text>
+                        <text x="10" y="75" fill="#888" font-size="10">Масштаб:</text><text x="120" y="75" fill="#22c55e" font-size="10" font-weight="bold">1:50</text>
+                        <text x="10" y="95" fill="#888" font-size="10">Размеры:</text><text x="120" y="95" fill="#f8fafc" font-size="10">28.0 × 20.0 м</text>
+                        <text x="10" y="115" fill="#888" font-size="10">Версия:</text><text x="120" y="115" fill="#f8fafc" font-size="10">v1.0 от 06.04.2026</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Проверка столкновений -->
+        <div class="plan-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Проверка столкновений и норм</h2>
+            
+            <div class="collision-alerts">
+                <h3><i class="fas fa-exclamation-circle"></i> Найденные проблемы</h3>
+                
+                <div class="collision-item warning">
+                    <div class="collision-icon"><i class="fas fa-exclamation"></i></div>
+                    <div class="collision-content">
+                        <strong>Узкий проход (T-06/T-07 — T-08/T-09)</strong>
+                        <p>Ширина прохода: 1.0 м. Требуется минимум 1.2 м для свободной эвакуации. Рекомендуется сместить столы или убрать один.</p>
+                    </div>
+                </div>
+                
+                <div class="collision-item warning">
+                    <div class="collision-icon"><i class="fas fa-exclamation"></i></div>
+                    <div class="collision-content">
+                        <strong>Зона безопасности у колонн</strong>
+                        <p>Минимальное расстояние от мебели до колонн должно составлять 0.5 м. Проверить размещение D-02.</p>
+                    </div>
+                </div>
+                
+                <div class="collision-item error">
+                    <div class="collision-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="collision-content">
+                        <strong>Барная стойка перекрывает путь эвакуации</strong>
+                        <p>В текущей конфигурации барная стойка создаёт узкое место у выхода. Рекомендуется сместить барную стойку на 0.5 м влево.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Зоны -->
+        <div class="plan-section">
+            <h2><i class="fas fa-border-all"></i> Зоны зала</h2>
+            
+            <div class="zone-list">
+                <div class="zone-card stage">
+                    <h4><i class="fas fa-music"></i> Сцена / Подиум</h4>
+                    <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 10px;">Площадь: ~72 м²</p>
+                    <ul>
+                        <li>Подиум для выступлений: 6×4 м</li>
+                        <li>Место для DJ/музыкантов</li>
+                        <li>Диско-шар с подсветкой</li>
+                        <li>Звуковое оборудование</li>
+                    </ul>
+                </div>
+                
+                <div class="zone-card dining">
+                    <h4><i class="fas fa-utensils"></i> Основной зал</h4>
+                    <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 10px;">Площадь: ~350 м²</p>
+                    <ul>
+                        <li>16 столов (48 посадочных мест)</li>
+                        <li>3 дивана для VIP-гостей</li>
+                        <li>Зона у окна (4 стола)</li>
+                        <li>VIP-зона (стол на 6 человек)</li>
+                    </ul>
+                </div>
+                
+                <div class="zone-card bar">
+                    <h4><i class="fas fa-glass-cheers"></i> Барная зона</h4>
+                    <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 10px;">Площадь: ~60 м²</p>
+                    <ul>
+                        <li>L-образная барная стойка: 6 м</li>
+                        <li>4 барных стула</li>
+                        <li>Витрина с напитками</li>
+                        <li>Кофемашина</li>
+                    </ul>
+                </div>
+                
+                <div class="zone-card kitchen">
+                    <h4><i class="fas fa-fire"></i> Кухня</h4>
+                    <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 10px;">Площадь: ~100 м²</p>
+                    <ul>
+                        <li>6-конфорочная плита</li>
+                        <li>Духовой шкаф</li>
+                        <li>Холодильник промышленный</li>
+                        <li>Мойка и рабочие столы</li>
+                    </ul>
+                </div>
+                
+                <div class="zone-card dance">
+                    <h4><i class="fas fa-discord"></i> Танцпол</h4>
+                    <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 10px;">Площадь: ~70 м²</p>
+                    <ul>
+                        <li>Диагональ: ~12 м</li>
+                        <li>Подсветка пола RGB</li>
+                        <li>Диван для отдыха</li>
+                        <li>DJ-пульт (на сцене)</li>
+                    </ul>
+                </div>
+                
+                <div class="zone-card facilities">
+                    <h4><i class="fas fa-door-closed"></i> Санузлы и гардероб</h4>
+                    <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 10px;">Площадь: ~50 м²</p>
+                    <ul>
+                        <li>Гардероб на 50 мест</li>
+                        <li>Мужской туалет (2 кабины)</li>
+                        <li>Женский туалет (2 кабины)</li>
+                        <li>Туалет для МГН</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Безопасность -->
+        <div class="plan-section">
+            <h2><i class="fas fa-shield-alt"></i> Требования безопасности</h2>
+            
+            <div class="safety-grid">
+                <div class="safety-item">
+                    <i class="fas fa-arrows-alt-h"></i>
+                    <h4>Минимальная ширина проходов</h4>
+                    <p>Эвакуационные пути: 1.2 м<br>Между столами: 1.0 м<br>К сервировке: 0.9 м</p>
+                </div>
+                
+                <div class="safety-item">
+                    <i class="fas fa-door-open"></i>
+                    <h4>Эвакуационные выходы</h4>
+                    <p>Главный вход: 1.2 м<br>Аварийный выход: 0.9 м<br>Расстояние до выхода: ≤25 м</p>
+                </div>
+                
+                <div class="safety-item">
+                    <i class="fas fa-fire-extinguisher"></i>
+                    <h4>Противопожарное оборудование</h4>
+                    <p>Огнетушители: 2 шт.<br>Пожарные извещатели: 4 шт.<br>Аптечка: 1 шт.</p>
+                </div>
+                
+                <div class="safety-item">
+                    <i class="fas fa-wheelchair"></i>
+                    <h4>Доступность для МГН</h4>
+                    <p>Пандус у входа<br>Санузел для инвалидов<br>Свободный проход 1.5 м</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Сводная таблица -->
+        <div class="plan-section">
+            <h2><i class="fas fa-table"></i> Сводная таблица элементов</h2>
+            
+            <div style="overflow-x: auto;">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Тип</th>
+                            <th>Размеры</th>
+                            <th>Вместимость</th>
+                            <th>Зона</th>
+                            <th>Коллизии</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>T-01</td><td>Стол круглый</td><td>⌀0.8 м</td><td>2</td><td>Зал</td><td>—</td></tr>
+                        <tr><td>T-02</td><td>Стол круглый</td><td>⌀1.2 м</td><td>4</td><td>Зал</td><td>—</td></tr>
+                        <tr><td>T-03</td><td>Стол прям.</td><td>1.2×0.8 м</td><td>4</td><td>Зал</td><td>—</td></tr>
+                        <tr><td>T-04</td><td>Стол круглый</td><td>⌀0.8 м</td><td>2</td><td>Зал</td><td>—</td></tr>
+                        <tr><td>T-05</td><td>Стол прям.</td><td>1.2×0.8 м</td><td>4</td><td>Зал</td><td>—</td></tr>
+                        <tr><td>T-06</td><td>Стол прям.</td><td>1.6×0.9 м</td><td>6</td><td>Зал</td><td>⚠</td></tr>
+                        <tr><td>T-07</td><td>Стол круглый</td><td>⌀1.2 м</td><td>4</td><td>Зал</td><td>⚠</td></tr>
+                        <tr><td>T-08</td><td>Стол прям.</td><td>1.2×0.8 м</td><td>4</td><td>Зал</td><td>⚠</td></tr>
+                        <tr><td>T-09</td><td>Стол круглый</td><td>⌀1.2 м</td><td>4</td><td>Зал</td><td>⚠</td></tr>
+                        <tr><td>T-10</td><td>Стол круглый VIP</td><td>⌀1.5 м</td><td>6</td><td>VIP</td><td>—</td></tr>
+                        <tr><td>D-01</td><td>Диван</td><td>1.4×0.6 м</td><td>4</td><td>Зал</td><td>—</td></tr>
+                        <tr><td>D-02</td><td>Диван</td><td>0.6×2.0 м</td><td>6</td><td>Зал</td><td>⚠</td></tr>
+                        <tr><td>D-03</td><td>Диван</td><td>0.6×0.9 м</td><td>2</td><td>Танцпол</td><td>—</td></tr>
+                        <tr><td>BAR-01</td><td>Бар</td><td>6.0×1.0 м</td><td>6</td><td>Бар</td><td>⚠</td></tr>
+                        <tr><td>STAGE-01</td><td>Сцена</td><td>7.2×2.4 м</td><td>—</td><td>Сцена</td><td>—</td></tr>
+                        <tr><td>KITCHEN-01</td><td>Кухня</td><td>10×4 м</td><td>—</td><td>Кухня</td><td>—</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Файлы для скачивания -->
+        <div class="plan-section">
+            <h2><i class="fas fa-download"></i> Файлы для скачивания</h2>
+            
+            <div class="download-section">
+                <a href="hall-plan.svg" download class="download-btn">
+                    <i class="fas fa-file-code"></i>
+                    SVG (Векторный)
+                </a>
+                <a href="#" class="download-btn secondary" onclick="alert('DXF экспорт доступен в полной версии CAD'); return false;">
+                    <i class="fas fa-file-cad"></i>
+                    DXF (CAD)
+                </a>
+                <a href="#" class="download-btn secondary" onclick="window.print(); return false;">
+                    <i class="fas fa-print"></i>
+                    Печать
+                </a>
+                <a href="#" class="download-btn secondary" onclick="generatePDF(); return false;">
+                    <i class="fas fa-file-pdf"></i>
+                    PDF
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        function toggleLayer(layer) {
+            const buttons = document.querySelectorAll('.plan-controls button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const layers = ['zones-layer', 'walls-layer', 'furniture-layer', 'seating-layer', 'bar-layer', 'stage-layer', 'kitchen-layer', 'facilities-layer', 'dancefloor-layer', 'safety-layer', 'labels-layer', 'entrances-layer'];
+            const gridLayer = document.getElementById('grid-layer');
+            const warningsLayer = document.getElementById('warnings-layer');
+            
+            layers.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = '';
+            });
+            if (gridLayer) gridLayer.style.display = '';
+            if (warningsLayer) warningsLayer.style.display = 'none';
+            
+            switch(layer) {
+                case 'furniture':
+                    ['zones-layer', 'walls-layer', 'bar-layer', 'stage-layer', 'kitchen-layer', 'facilities-layer', 'dancefloor-layer', 'safety-layer', 'labels-layer', 'entrances-layer'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'none';
+                    });
+                    break;
+                case 'zones':
+                    ['walls-layer', 'furniture-layer', 'seating-layer', 'bar-layer', 'stage-layer', 'kitchen-layer', 'facilities-layer', 'dancefloor-layer', 'safety-layer', 'labels-layer', 'entrances-layer'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'none';
+                    });
+                    break;
+                case 'safety':
+                    ['furniture-layer', 'seating-layer', 'bar-layer', 'stage-layer', 'kitchen-layer', 'facilities-layer', 'dancefloor-layer', 'labels-layer', 'entrances-layer'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'none';
+                    });
+                    break;
+                case 'grid':
+                    ['zones-layer', 'walls-layer', 'furniture-layer', 'seating-layer', 'bar-layer', 'stage-layer', 'kitchen-layer', 'facilities-layer', 'dancefloor-layer', 'safety-layer', 'labels-layer', 'entrances-layer'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'none';
+                    });
+                    break;
+            }
+        }
+        
+        function toggleWarnings() {
+            const warningsLayer = document.getElementById('warnings-layer');
+            if (warningsLayer) {
+                warningsLayer.style.display = warningsLayer.style.display === 'none' ? '' : 'none';
+            }
+        }
+        
+        function generatePDF() {
+            alert('Для генерации PDF используйте функцию печати браузера (Ctrl+P) и выберите "Сохранить как PDF"');
+        }
+    </script>
+</body>
+</html>
