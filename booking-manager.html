@@ -38,6 +38,7 @@
                         <li><a href="#" class="admin-nav-link active" data-tab="bookings">Бронирования</a></li>
                         <li><a href="#" class="admin-nav-link" data-tab="tables">Столики</a></li>
                         <li><a href="#" class="admin-nav-link" data-tab="menu">Меню</a></li>
+                        <li><a href="#" class="admin-nav-link" data-tab="suppliers">Поставщики</a></li>
                     </ul>
                 </nav>
                 <button id="logout-btn" class="btn-primary">Выйти</button>
@@ -110,24 +111,23 @@
                 </div>
 
                 <!-- Tab: Tables -->
-                <!-- Tab: Tables -->
-<div id="tables-tab" class="tab-content">
-    <div class="tables-management">
-        <div class="tables-header">
-            <h3>Управление столиками</h3>
-            <select id="tables-zone-filter" class="zone-filter">
-                <option value="all">Все зоны</option>
-                <option value="первая позиция">Первая позиция</option>
-                <option value="вторая позиция">Вторая позиция</option>
-                <option value="третья позиция">Третья позиция</option>
-                <option value="средний зал">Средний зал</option>
-                <option value="танцпол">Танцпол</option>
-                <option value="подвал">Подвал</option>
-            </select>
-        </div>
-        <div id="tables-list"></div>
-    </div>
-</div>
+                <div id="tables-tab" class="tab-content">
+                    <div class="tables-management">
+                        <div class="tables-header">
+                            <h3>Управление столиками</h3>
+                            <select id="tables-zone-filter" class="zone-filter">
+                                <option value="all">Все зоны</option>
+                                <option value="первая позиция">Первая позиция</option>
+                                <option value="вторая позиция">Вторая позиция</option>
+                                <option value="третья позиция">Третья позиция</option>
+                                <option value="средний зал">Средний зал</option>
+                                <option value="танцпол">Танцпол</option>
+                                <option value="подвал">Подвал</option>
+                            </select>
+                        </div>
+                        <div id="tables-list"></div>
+                    </div>
+                </div>
 
                 <!-- Tab: Menu -->
                 <div id="menu-tab" class="tab-content">
@@ -150,6 +150,20 @@
                         </select>
                     </div>
                     <div id="menu-list" class="menu-list-admin"></div>
+                </div>
+
+                <!-- Tab: Suppliers -->
+                <div id="suppliers-tab" class="tab-content">
+                    <div class="suppliers-management">
+                        <div class="suppliers-header">
+                            <h3>Управление поставщиками</h3>
+                            <button id="add-supplier-btn" class="btn-primary">+ Добавить поставщика</button>
+                        </div>
+                        <div class="suppliers-controls">
+                            <input type="text" id="suppliers-search" placeholder="Поиск по названию, контакту, email..." class="suppliers-search-input">
+                        </div>
+                        <div id="suppliers-list" class="suppliers-list"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -224,10 +238,44 @@
         </div>
     </div>
 
+    <!-- Modal: Add/Edit Supplier -->
+    <div id="supplier-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="supplier-modal-title">Добавить поставщика</h3>
+            <form id="supplier-form">
+                <div class="form-group">
+                    <label for="supplier-name">Название *</label>
+                    <input type="text" id="supplier-name" required placeholder="ООО 'ПродуктСервис'">
+                </div>
+                <div class="form-group">
+                    <label for="supplier-contact-person">Контактное лицо</label>
+                    <input type="text" id="supplier-contact-person" placeholder="Иванов Иван Иванович">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="supplier-phone">Телефон</label>
+                        <input type="tel" id="supplier-phone" placeholder="+375 29 123-45-67">
+                    </div>
+                    <div class="form-group">
+                        <label for="supplier-email">Email</label>
+                        <input type="email" id="supplier-email" placeholder="info@example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="supplier-address">Адрес</label>
+                    <textarea id="supplier-address" rows="2" placeholder="г. Минск, ул. Примерная, 123"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
     <script src="supabase-config.js"></script>
     <script src="utils.js"></script>
     <script src="admin-panel.js"></script>
     <script src="admin-menu.js"></script>
+    <script src="admin-suppliers.js"></script>
     <script>
         // Навигация в админ-панели
         document.addEventListener('DOMContentLoaded', function() {

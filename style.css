@@ -2023,3 +2023,328 @@ footer {
         font-size: 0.7rem;
     }
 }
+/* Suppliers management - FULL WIDTH */
+.suppliers-management {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.suppliers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.suppliers-header h3 {
+    color: var(--primary);
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 0.5rem;
+}
+
+.suppliers-controls {
+    margin-bottom: 1.5rem;
+}
+
+.suppliers-search-input {
+    width: 100%;
+    max-width: 350px;
+    padding: 0.6rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* Suppliers list as TABLE (full width) */
+.suppliers-list {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.suppliers-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.suppliers-table th {
+    background: var(--primary);
+    color: white;
+    padding: 14px 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.suppliers-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+.suppliers-table tr:hover {
+    background: var(--light);
+}
+
+.supplier-name {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.supplier-contact-person {
+    color: var(--gray);
+    font-size: 0.85rem;
+}
+
+.supplier-phone {
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+.supplier-email {
+    color: var(--primary);
+}
+
+.supplier-address {
+    color: var(--gray);
+    font-size: 0.85rem;
+    max-width: 250px;
+}
+
+.supplier-actions {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.supplier-actions .btn-action {
+    padding: 6px 12px;
+    min-width: 90px;
+    font-size: 0.8rem;
+}
+
+/* Колонки таблицы поставщиков */
+.suppliers-table th:nth-child(1) { width: 20%; }  /* Название */
+.suppliers-table th:nth-child(2) { width: 15%; }  /* Контактное лицо */
+.suppliers-table th:nth-child(3) { width: 15%; }  /* Телефон */
+.suppliers-table th:nth-child(4) { width: 18%; }  /* Email */
+.suppliers-table th:nth-child(5) { width: 22%; }  /* Адрес */
+.suppliers-table th:nth-child(6) { width: 10%; }  /* Действия */
+
+/* Responsive suppliers */
+@media (max-width: 992px) {
+    .suppliers-table th:nth-child(5),
+    .suppliers-table td:nth-child(5) {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .suppliers-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .suppliers-table th,
+    .suppliers-table td {
+        white-space: nowrap;
+    }
+    
+    .suppliers-table th:nth-child(5),
+    .suppliers-table td:nth-child(5) {
+        white-space: normal;
+        word-break: break-word;
+        min-width: 200px;
+    }
+    
+    .suppliers-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .suppliers-search-input {
+        max-width: 100%;
+    }
+}
+/* FULL WIDTH ADMIN CONTENT */
+.admin-content .container {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0;
+}
+
+/* Suppliers management - FULL WIDTH */
+.suppliers-management {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    margin: 0;
+}
+
+.suppliers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.suppliers-header h3 {
+    color: var(--primary);
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 0.5rem;
+    margin: 0;
+}
+
+.suppliers-controls {
+    margin-bottom: 1.5rem;
+}
+
+.suppliers-search-input {
+    width: 100%;
+    max-width: 350px;
+    padding: 0.6rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* Suppliers TABLE - FULL WIDTH */
+.suppliers-list {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.suppliers-table {
+    width: 100%;
+    min-width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    table-layout: fixed;
+}
+
+.suppliers-table th {
+    background: var(--primary);
+    color: white;
+    padding: 14px 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.suppliers-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.suppliers-table tr:hover {
+    background: var(--light);
+}
+
+.supplier-name {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.supplier-contact-person {
+    color: var(--gray);
+    font-size: 0.85rem;
+}
+
+.supplier-phone {
+    color: var(--primary);
+}
+
+.supplier-email {
+    color: var(--primary);
+}
+
+.supplier-address {
+    color: var(--gray);
+    font-size: 0.85rem;
+}
+
+.supplier-actions {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.supplier-actions .btn-action {
+    padding: 6px 12px;
+    min-width: 90px;
+    font-size: 0.8rem;
+}
+
+/* Ширина колонок - ПРОЦЕНТНАЯ */
+.suppliers-table th:nth-child(1) { width: 20%; }  /* Название */
+.suppliers-table th:nth-child(2) { width: 20%; }  /* Контактное лицо */
+.suppliers-table th:nth-child(3) { width: 15%; }  /* Телефон */
+.suppliers-table th:nth-child(4) { width: 15%; }  /* Email */
+.suppliers-table th:nth-child(5) { width: 20%; }  /* Адрес */
+.suppliers-table th:nth-child(6) { width: 10%; }  /* Действия */
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .suppliers-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .suppliers-table th,
+    .suppliers-table td {
+        white-space: nowrap;
+    }
+    
+    .suppliers-table th:nth-child(5),
+    .suppliers-table td:nth-child(5) {
+        white-space: normal;
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-content .container {
+        padding: 0 10px;
+    }
+    
+    .suppliers-management {
+        padding: 1rem;
+    }
+    
+    .suppliers-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .suppliers-search-input {
+        max-width: 100%;
+    }
+}
