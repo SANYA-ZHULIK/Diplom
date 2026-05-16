@@ -4,11 +4,13 @@
 */
 
 let allTables = [], allBookings = [], editingBookingId = null;
+let currentZoneFilter = 'all'; // Добавляем переменную для фильтрации столиков
 const ADMIN_EMAIL = 'admin@restaurant.com', ADMIN_PASSWORD = 'admin123';
 
 function getClient() { return window.supabaseClient; }
 function isAdminLoggedIn() { return sessionStorage.getItem('adminLoggedIn') === 'true'; }
 function setAdminLoggedIn(v) { v ? sessionStorage.setItem('adminLoggedIn','true') : sessionStorage.removeItem('adminLoggedIn'); }
+
 // Header scroll effect for admin panel
 function initAdminHeaderScroll() {
     const header = document.querySelector('header');
@@ -41,21 +43,24 @@ function initAdminHeaderScroll() {
     updateHeaderOnScroll();
 }
 
-// Вызвать после загрузки страницы
 document.addEventListener('DOMContentLoaded', initAdminHeaderScroll);
+
 function showAdminPanel() {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
 }
+
 function showLoginForm() {
     hideLoading();
     document.getElementById('login-container').style.display = 'block';
     document.getElementById('admin-panel').style.display = 'none';
 }
+
 function showLoading() {
     const overlay = document.getElementById('loading-overlay');
     if (overlay) overlay.style.display = 'flex';
 }
+
 function hideLoading() {
     const overlay = document.getElementById('loading-overlay');
     if (overlay) overlay.style.display = 'none';
@@ -117,6 +122,15 @@ function initAdmin() {
     } else showLoginForm();
     document.getElementById('login-form')?.addEventListener('submit',loginAdmin);
     document.getElementById('logout-btn')?.addEventListener('click',(e)=>{e.preventDefault();logoutAdmin();});
+    
+    // Инициализация фильтра столиков
+    const zoneFilter = document.getElementById('tables-zone-filter');
+    if (zoneFilter) {
+        zoneFilter.addEventListener('change', (e) => {
+            currentZoneFilter = e.target.value;
+            renderTablesList();
+        });
+    }
 }
 
 async function loadAllData() {
@@ -151,6 +165,7 @@ async function loadTables() {
         allTables=(data||[]).filter(t=>t&&t.id!=null).map(t=>({...t,id:+t.id,seats:+t.seats,x:+t.x,y:+t.y,is_active:!!t.is_active}));
         console.log('Tables loaded:', allTables.length);
         populateTableSelect();
+        renderTablesList(); // Перерисовываем после загрузки
     }catch(e){ console.error('Load tables error:',e); allTables=[]; }
 }
 
@@ -253,13 +268,56 @@ async function addManualBooking(e){
     }catch(err){ showToast('Ошибка: '+(err.message||err),'error'); }
 }
 
-function renderTablesList(){
-    const c=document.getElementById('tables-list'); if(!c) return;
-    if(!allTables.length){ c.innerHTML='<p class="no-data">Загрузка...</p>'; return; }
-    c.innerHTML=allTables.map(t=>{
-        const id=+t.id, n=t.number||'?', seats=+t.seats||0, zone=t.zone_name||'', blocked=t.is_active===false?' blocked':'', btn=t.is_active===false?'Разблокировать':'Заблокировать';
-        return `<div class="table-block${blocked}"><div class="table-info"><strong>Стол ${n}</strong><span class="table-details">${seats} мест • ${zone}</span></div><button onclick="toggleTable(${id},${!t.is_active})" class="btn-action ${t.is_active===false?'btn-unblock':'btn-block'}">${btn}</button></div>`;
-    }).join('');
+function renderTablesList() {
+    const container = document.getElementById('tables-list');
+    if (!container) return;
+
+    if (!allTables.length) {
+        container.innerHTML = '<p class="no-data">Нет столиков</p>';
+        return;
+    }
+
+    // Фильтрация по зоне
+    let filteredTables = allTables;
+    if (currentZoneFilter !== 'all') {
+        filteredTables = allTables.filter(t => t.zone_name === currentZoneFilter);
+    }
+
+    // Группировка по зонам
+    const zones = {};
+    filteredTables.forEach(t => {
+        const zone = t.zone_name || 'Без зоны';
+        if (!zones[zone]) zones[zone] = [];
+        zones[zone].push(t);
+    });
+
+    let html = '';
+    for (const [zone, tables] of Object.entries(zones)) {
+        html += `<div class="tables-by-zone" data-zone="${zone}">`;
+        html += `<h4 class="zone-title-small">${zone}</h4>`;
+        tables.forEach(t => {
+            const id = Number(t.id);
+            const number = t.number || '?';
+            const seats = Number(t.seats) || 0;
+            const blocked = t.is_active === false;
+            const btnText = blocked ? 'Разблокировать' : 'Заблокировать';
+            
+            html += `
+                <div class="table-block ${blocked ? 'blocked' : ''}">
+                    <div class="table-info">
+                        <strong>Стол ${number}</strong>
+                        <span class="table-details">${seats} мест</span>
+                    </div>
+                    <button onclick="toggleTable(${id}, ${!blocked})" class="btn-action ${blocked ? 'btn-unblock' : 'btn-block'}">
+                        ${btnText}
+                    </button>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+
+    container.innerHTML = html;
 }
 
 async function toggleTable(id, unblock){
@@ -273,7 +331,7 @@ function setupRealtime(){
     const c=getClient(); if(!c) return;
     try{ c.channel('admin-changes')?.unsubscribe(); }catch(e){}
     c.channel('admin-changes').on('postgres_changes',{event:'*',schema:'public',table:'bookings'},()=>loadBookings())
-     .on('postgres_changes',{event:'*',schema:'public',table:'tables'},()=>loadTables())
+     .on('postgres_changes',{event:'*',schema:'public',table:'tables'},()=>{loadTables(); renderTablesList();})
      .subscribe(s=>console.log('Realtime status:',s));
 }
 

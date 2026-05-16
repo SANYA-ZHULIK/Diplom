@@ -1433,6 +1433,7 @@ footer {
     background: #c0392b;
 }
 /* ===== УПРАВЛЕНИЕ СТОЛИКАМИ — УЛУЧШЕННЫЕ СТИЛИ ===== */
+/* ===== УПРАВЛЕНИЕ СТОЛИКАМИ ===== */
 .tables-management {
     background: var(--white);
     padding: 2rem;
@@ -1440,12 +1441,37 @@ footer {
     box-shadow: var(--shadow);
 }
 
+.tables-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
 .tables-management h3 {
     color: var(--primary);
-    margin-bottom: 1.5rem;
+    margin: 0;
     font-size: 1.3rem;
     border-bottom: 2px solid var(--secondary);
     padding-bottom: 0.5rem;
+}
+
+.zone-filter {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    background: var(--white);
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.zone-filter:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
 .table-block {
@@ -1511,4 +1537,21 @@ footer {
 
 .table-block button.btn-block:hover {
     background: #c0392b;
+}
+.tables-by-zone {
+    margin-bottom: 1.5rem;
+}
+
+.zone-title-small {
+    font-size: 0.9rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--secondary);
+}
+/* Увеличение ширины выбора кода страны в форме бронирования */
+.phone-input-wrapper select {
+    width: 170px !important;
+    min-width: 170px !important;
 }
