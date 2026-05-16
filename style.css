@@ -2189,6 +2189,7 @@ footer {
 }
 
 /* Suppliers management - FULL WIDTH */
+/* ===== SUPPLIERS TABLE - OPTIMIZED FOR BUTTONS ===== */
 .suppliers-management {
     background: var(--white);
     padding: 2rem;
@@ -2228,7 +2229,6 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Suppliers TABLE - FULL WIDTH */
 .suppliers-list {
     display: block;
     width: 100%;
@@ -2237,30 +2237,30 @@ footer {
 
 .suppliers-table {
     width: 100%;
-    min-width: 100%;
+    min-width: 1375px;
     border-collapse: collapse;
     background: var(--white);
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
-    table-layout: fixed;
 }
 
 .suppliers-table th {
     background: var(--primary);
     color: white;
-    padding: 14px 12px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    text-align: left;
+    padding: 12px 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .suppliers-table td {
-    padding: 12px;
+    padding: 10px 6px;
     border-bottom: 1px solid #eee;
     vertical-align: middle;
-    font-size: 0.9rem;
-    word-break: break-word;
+    font-size: 0.85rem;
+    text-align: center;
 }
 
 .suppliers-table tr:hover {
@@ -2268,65 +2268,65 @@ footer {
 }
 
 .supplier-name {
-    font-weight: 700;
+    font-weight: 600;
     color: var(--dark);
+    text-align: left;
 }
 
 .supplier-contact-person {
     color: var(--gray);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .supplier-phone {
     color: var(--primary);
+    white-space: nowrap;
 }
 
 .supplier-email {
     color: var(--primary);
+    font-size: 0.8rem;
+    word-break: break-all;
 }
 
 .supplier-address {
     color: var(--gray);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    text-align: left;
 }
 
 .supplier-actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
+    justify-content: center;
     white-space: nowrap;
 }
 
 .supplier-actions .btn-action {
-    padding: 6px 12px;
-    min-width: 90px;
-    font-size: 0.8rem;
+    padding: 5px 10px;
+    min-width: 75px;
+    font-size: 0.75rem;
+    height: 30px;
 }
 
-/* Ширина колонок - ПРОЦЕНТНАЯ */
-.suppliers-table th:nth-child(1) { width: 20%; }  /* Название */
-.suppliers-table th:nth-child(2) { width: 20%; }  /* Контактное лицо */
-.suppliers-table th:nth-child(3) { width: 15%; }  /* Телефон */
-.suppliers-table th:nth-child(4) { width: 15%; }  /* Email */
-.suppliers-table th:nth-child(5) { width: 20%; }  /* Адрес */
-.suppliers-table th:nth-child(6) { width: 10%; }  /* Действия */
+/* Узкие колонки */
+.suppliers-table th:nth-child(1) { width: 18%; }  /* Название */
+.suppliers-table th:nth-child(2) { width: 15%; }  /* Контактное лицо */
+.suppliers-table th:nth-child(3) { width: 12%; }  /* Телефон */
+.suppliers-table th:nth-child(4) { width: 18%; }  /* Email */
+.suppliers-table th:nth-child(5) { width: 22%; }  /* Адрес */
+.suppliers-table th:nth-child(6) { width: 15%; }  /* Действия */
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
     .suppliers-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        min-width: 750px;
     }
     
-    .suppliers-table th,
-    .suppliers-table td {
-        white-space: nowrap;
-    }
-    
-    .suppliers-table th:nth-child(5),
-    .suppliers-table td:nth-child(5) {
-        white-space: normal;
-        min-width: 200px;
+    .supplier-actions .btn-action {
+        min-width: 65px;
+        padding: 4px 8px;
+        font-size: 0.7rem;
     }
 }
 
@@ -2348,3 +2348,4 @@ footer {
         max-width: 100%;
     }
 }
+
