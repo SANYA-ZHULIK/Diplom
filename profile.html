@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - У Ратуши</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="utils.js"></script>
+    <script src="auth.js"></script>
+</head>
+<body class="profile-page">
+    <header>
+        <div class="container header-inner">
+            <a href="/" class="logo"><img src="logo.png" alt="У Ратуши">У Ратуши</a>
+            <nav>
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/#about">О ресторане</a></li>
+                    <li><a href="/#menu">Меню</a></li>
+                    <li><a href="/#booking">Бронирование</a></li>
+                    <li><a href="/#contacts">Контакты</a></li>
+                </ul>
+            </nav>
+            <div id="auth-buttons" class="auth-buttons"></div>
+            <div id="user-menu" style="display: none;"></div>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        </div>
+    </header>
+
+    <main class="profile-main">
+        <div class="profile-container">
+            <!-- Боковое меню -->
+            <div class="profile-sidebar">
+                <div class="profile-avatar-large" id="profile-avatar-large">
+                    <span id="avatar-letter">?</span>
+                </div>
+                <div class="profile-user-info">
+                    <h3 id="profile-user-name">Загрузка...</h3>
+                    <p id="profile-user-email">...</p>
+                </div>
+                <nav class="profile-nav">
+                    <a href="#" class="profile-nav-link active" data-tab="bookings">
+                        📅 Мои бронирования
+                    </a>
+                    <a href="#" class="profile-nav-link" data-tab="orders">
+                        🧾 История заказов
+                    </a>
+                    <a href="#" class="profile-nav-link" data-tab="settings">
+                        ⚙️ Настройки профиля
+                    </a>
+                    <a href="#" class="profile-nav-link" data-tab="reviews">
+                        ✍️ Мои отзывы
+                    </a>
+                    <a href="#" onclick="logoutUser(); return false;" class="profile-nav-link logout">
+                        🚪 Выйти
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Основной контент -->
+            <div class="profile-content">
+                <!-- Вкладка: Бронирования -->
+                <div id="bookings-tab" class="profile-tab active">
+                    <h2>Мои бронирования</h2>
+                    <div id="user-bookings-list" class="bookings-list">
+                        <div class="loading">Загрузка бронирований...</div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Заказы -->
+                <div id="orders-tab" class="profile-tab">
+                    <h2>История заказов</h2>
+                    <div id="user-orders-list" class="orders-list">
+                        <div class="loading">Загрузка заказов...</div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Настройки -->
+                <div id="settings-tab" class="profile-tab">
+                    <h2>Настройки профиля</h2>
+                    <form id="profile-settings-form" class="profile-settings-form">
+                        <div class="form-group">
+                            <label for="edit-full-name">Имя и фамилия</label>
+                            <input type="text" id="edit-full-name" required minlength="2" placeholder="Иван Иванов">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-phone">Телефон</label>
+                            <input type="tel" id="edit-phone" placeholder="+375 29 123-45-67">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-email">Email</label>
+                            <input type="email" id="edit-email" disabled>
+                            <small class="form-hint">Email нельзя изменить</small>
+                        </div>
+                        <button type="submit" class="btn-primary">Сохранить изменения</button>
+                    </form>
+                </div>
+
+                <!-- Вкладка: Отзывы -->
+                <div id="reviews-tab" class="profile-tab">
+                    <h2>Мои отзывы</h2>
+                    <div id="user-reviews-list" class="reviews-list">
+                        <div class="loading">Загрузка отзывов...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">У Ратуши</div>
+                    <p class="footer-text">Уютный ресторан в самом сердце Минска</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <p>г. Минск, ул. Герцена, 1</p>
+                    <p><a href="tel:+375256550505">+375 25 655-05-05</a></p>
+                    <p><a href="https://instagram.com/uratushi05" target="_blank">@uratushi05</a></p>
+                </div>
+                <div class="footer-col">
+                    <h4>Время работы</h4>
+                    <p>Ежедневно: 12:00 - 02:00</p>
+                    <p>Бронирование: 18:00 - 23:00</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Юридическая информация</h4>
+                    <p>СООО "Зафаран"</p>
+                    <p>УНП: 800014371</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Ресторан "У Ратуши". Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="profile.js"></script>
+    <script>
+        function toggleMenu() {
+            document.querySelector('nav ul').classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем авторизацию
+            if (!isAuthenticated()) {
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>

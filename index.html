@@ -161,7 +161,46 @@
         </div>
     </div>
 
-    <section id="contacts" class="section">
+   
+    <!-- Section: Promotions -->
+<section id="promotions" class="section promotions-section">
+    <div class="container">
+        <h2 class="section-title">Акции и предложения</h2>
+        
+        <div id="promotions-container" class="promotions-grid">
+            <div class="loading">Загрузка акций...</div>
+        </div>
+    </div>
+</section>
+
+<!-- Section: FAQ -->
+<section id="faq" class="section faq-section">
+    <div class="container">
+        <h2 class="section-title">Часто задаваемые вопросы</h2>
+       
+        <div id="faq-container" class="faq-wrapper">
+            <div class="loading">Загрузка вопросов...</div>
+        </div>
+    </div>
+</section>
+<!-- Section: Reviews -->
+<section id="reviews" class="section reviews-section">
+    <div class="container">
+        <h2 class="section-title">Отзывы наших гостей</h2>
+        
+        <div class="reviews-header">
+           
+            <button class="btn-primary btn-leave-review" onclick="showReviewForm()">
+                Оставить отзыв
+            </button>
+        </div>
+        
+        <div id="reviews-container" class="reviews-grid">
+            <div class="loading">Загрузка отзывов...</div>
+        </div>
+    </div>
+</section>
+ <section id="contacts" class="section">
         <div class="container">
             <h2 class="section-title">Контакты</h2>
             <div class="contacts-layout">
@@ -194,24 +233,6 @@
             </div>
         </div>
     </section>
-<!-- Section: Reviews -->
-<section id="reviews" class="section reviews-section">
-    <div class="container">
-        <h2 class="section-title">Отзывы наших гостей</h2>
-        
-        <div class="reviews-header">
-            <p class="reviews-subtitle">Что говорят о нас посетители</p>
-            <button class="btn-primary btn-leave-review" onclick="showReviewForm()">
-                Оставить отзыв
-            </button>
-        </div>
-        
-        <div id="reviews-container" class="reviews-grid">
-            <div class="loading">Загрузка отзывов...</div>
-        </div>
-    </div>
-</section>
-
 <!-- Modal: Leave Review -->
 <div id="review-modal" class="modal">
     <div class="modal-content">
@@ -319,6 +340,8 @@
     <script src="booking.js"></script>
     <script src="menu.js"></script>
     <script src="reviews.js"></script>
+    <script src="faq.js"></script>
+<script src="promotions.js"></script>
     <script>
         function toggleMenu() {
             document.querySelector('nav ul').classList.toggle('active');

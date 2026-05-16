@@ -407,57 +407,9 @@ async function loadProfilePage() {
         openAuthModal('login');
         return;
     }
-
-    const profileSection = document.getElementById('profile');
-    if (!profileSection) return;
-
-    // Обновляем данные пользователя из БД перед отображением
-    await refreshCurrentUser();
-
-    // Заполняем данные профиля ИЗ currentUser
-    const avatarEl = document.getElementById('profile-avatar');
-    const nameEl = document.getElementById('profile-name');
-    const emailEl = document.getElementById('profile-email');
-    const phoneEl = document.getElementById('profile-phone');
-    const editNameInput = document.getElementById('edit-full-name');
-    const editPhoneInput = document.getElementById('edit-phone');
-
-    const userName = currentUser?.full_name || currentUser?.email?.split('@')[0] || 'Пользователь';
     
-    if (avatarEl) avatarEl.textContent = userName.charAt(0).toUpperCase();
-    if (nameEl) nameEl.textContent = currentUser?.full_name || 'Имя не указано';
-    if (emailEl) emailEl.textContent = currentUser?.email || '';
-    if (phoneEl) phoneEl.textContent = currentUser?.phone || 'Телефон не указан';
-    
-    if (editNameInput) editNameInput.value = currentUser?.full_name || '';
-    if (editPhoneInput) editPhoneInput.value = currentUser?.phone || '';
-
-    // Показываем секцию профиля
-    profileSection.style.display = 'block';
-    profileSection.scrollIntoView({ behavior: 'smooth' });
-    
-    // Загружаем бронирования
-    const bookings = await getUserBookings();
-    const container = document.getElementById('user-bookings-list');
-    
-    if (container) {
-        if (bookings.length === 0) {
-            container.innerHTML = '<p>У вас пока нет бронирований</p>';
-        } else {
-            const statusLabels = { new: 'Новая', confirmed: 'Подтверждена', completed: 'Завершена', cancelled: 'Отменена' };
-            container.innerHTML = bookings.map(b => `
-                <div class="booking-item">
-                    <div class="booking-details">
-                        <div><strong>Дата:</strong> ${b.date}</div>
-                        <div><strong>Время:</strong> ${b.time_slot}</div>
-                        <div><strong>Стол:</strong> ${b.tables?.number || b.table_id}</div>
-                        <div><strong>Гостей:</strong> ${b.guests_count}</div>
-                        <div><strong>Статус:</strong> ${statusLabels[b.status] || b.status}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-    }
+    // Перенаправляем на отдельную страницу профиля
+    window.location.href = '/profile.html';
 }
 
 // Функция для переключения режима редактирования профиля
