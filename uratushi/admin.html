@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель — У Ратуши</title>
+    <meta name="description" content="Панель администратора ресторана У Ратуши">
+    <meta name="theme-color" content="#0a0a0f">
+    <link rel="stylesheet" href="css/modern-dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%236366f1' rx='15' width='100' height='100'/><text y='.9em' x='50%' text-anchor='middle' font-size='70'>🏛️</text></svg>">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🏛️</div>
+                <h1>У Ратуши</h1>
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-map"></i>
+                    Карта зала
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    Личный кабинет
+                </a>
+                <a href="admin.html" class="nav-link active">
+                    <i class="fas fa-cog"></i>
+                    Админ
+                </a>
+            </nav>
+            <div class="user-menu hidden" id="userMenu">
+                <span id="userEmail"></span>
+                <button class="btn btn-ghost" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Выйти
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Сообщение для неавторизованных -->
+            <div class="auth-message" id="authMessage">
+                <div style="text-align: center; padding: var(--space-16);">
+                    <i class="fas fa-shield-alt" style="font-size: 4rem; color: var(--status-occupied); margin-bottom: var(--space-6);"></i>
+                    <h3 style="margin-bottom: var(--space-4);">Доступ запрещен</h3>
+                    <p style="margin-bottom: var(--space-6);">Необходима авторизация с правами администратора</p>
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </a>
+                </div>
+            </div>
+
+            <!-- Контент для администраторов -->
+            <div class="admin-content hidden" id="adminContent">
+                <div style="margin-bottom: var(--space-8);">
+                    <h2>
+                        <i class="fas fa-tachometer-alt" style="color: var(--accent-primary); margin-right: 12px;"></i>
+                        Панель управления
+                    </h2>
+                </div>
+
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="switchAdminTab('bookings')">
+                        <i class="fas fa-calendar-check"></i>
+                        Бронирования
+                    </button>
+                    <button class="tab-btn" onclick="switchAdminTab('tables')">
+                        <i class="fas fa-chair"></i>
+                        Столики
+                    </button>
+                </div>
+
+                <!-- Вкладка бронирований -->
+                <div class="tab-content active" id="bookingsTab">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="filterDate">
+                                <i class="fas fa-calendar"></i>
+                                Дата
+                            </label>
+                            <input type="date" id="filterDate">
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterStatus">
+                                <i class="fas fa-filter"></i>
+                                Статус
+                            </label>
+                            <select id="filterStatus">
+                                <option value="">Все статусы</option>
+                                <option value="pending">Ожидает</option>
+                                <option value="confirmed">Подтверждено</option>
+                                <option value="completed">Завершено</option>
+                                <option value="cancelled">Отменено</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="loadAdminBookings()">
+                            <i class="fas fa-search"></i>
+                            Найти
+                        </button>
+                    </div>
+
+                    <div class="bookings-table-container">
+                        <table class="bookings-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-hashtag"></i> ID</th>
+                                    <th><i class="fas fa-user"></i> Клиент</th>
+                                    <th><i class="fas fa-phone"></i> Телефон</th>
+                                    <th><i class="fas fa-chair"></i> Столик</th>
+                                    <th><i class="fas fa-clock"></i> Дата/время</th>
+                                    <th><i class="fas fa-hourglass-half"></i> Длит.</th>
+                                    <th><i class="fas fa-info-circle"></i> Статус</th>
+                                    <th><i class="fas fa-cog"></i> Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminBookingsList">
+                                <!-- Динамическое содержимое -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Вкладка управления столиками -->
+                <div class="tab-content" id="tablesTab">
+                    <div class="tables-management">
+                        <div class="tables-header">
+                            <button class="btn btn-primary" onclick="showAddTableModal()">
+                                <i class="fas fa-plus"></i>
+                                Добавить столик
+                            </button>
+                        </div>
+                        <div class="tables-grid" id="tablesGrid">
+                            <!-- Динамическое содержимое -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно подтверждения бронирования -->
+    <div class="modal" id="confirmBookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-check-circle" style="color: var(--status-available); margin-right: 8px;"></i>
+                    Подтверждение бронирования
+                </h3>
+                <button class="modal-close" onclick="hideModal('confirmBookingModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="content">
+                <div class="booking-details" id="confirmBookingDetails">
+                    <!-- Детали бронирования -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="rejectBooking()">
+                    <i class="fas fa-times"></i>
+                    Отклонить
+                </button>
+                <button class="btn btn-success" onclick="approveBooking()">
+                    <i class="fas fa-check"></i>
+                    Подтвердить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно отметки визита -->
+    <div class="modal" id="completeModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-check-double" style="color: var(--status-available); margin-right: 8px;"></i>
+                    Отметить визит
+                </h3>
+                <button class="modal-close" onclick="hideModal('completeModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="content">
+                <p>
+                    <i class="fas fa-info-circle" style="color: var(--accent-primary); margin-right: 8px;"></i>
+                    Подтвердите, что гость прибыл.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('completeModal')">
+                    <i class="fas fa-arrow-left"></i>
+                    Отмена
+                </button>
+                <button class="btn btn-success" id="confirmCompleteBtn">
+                    <i class="fas fa-check"></i>
+                    Гость пришел
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления/редактирования столика -->
+    <div class="modal" id="tableModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="tableModalTitle">
+                    <i class="fas fa-chair" style="color: var(--accent-primary); margin-right: 8px;"></i>
+                    Добавить столик
+                </h3>
+                <button class="modal-close" onclick="hideModal('tableModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="tableForm" onsubmit="handleTableSave(event)">
+                <input type="hidden" id="tableId">
+                <div class="form-group">
+                    <label for="tableNumber">
+                        <i class="fas fa-hashtag" style="margin-right: 6px;"></i>
+                        Номер столика
+                    </label>
+                    <input type="number" id="tableNumber" required min="1" placeholder="1">
+                </div>
+                <div class="form-group">
+                    <label for="tableSeats">
+                        <i class="fas fa-users" style="margin-right: 6px;"></i>
+                        Количество мест
+                    </label>
+                    <input type="number" id="tableSeats" required min="1" max="20" placeholder="4">
+                </div>
+                <div class="form-group">
+                    <label for="tableMinGuests">
+                        <i class="fas fa-user-friends" style="margin-right: 6px;"></i>
+                        Мин. гостепри бронировании
+                    </label>
+                    <input type="number" id="tableMinGuests" required min="1" max="20" placeholder="1">
+                    <small>Минимальное количество гостей для брони</small>
+                </div>
+                <div class="form-group">
+                    <label for="tableZone">
+                        <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>
+                        Зона
+                    </label>
+                    <select id="tableZone">
+                        <option value="main">Основной зал</option>
+                        <option value="middle">Средний зал</option>
+                        <option value="basement">Подвал</option>
+                        <option value="dancefloor">Танцпол</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tableX">
+                        <i class="fas fa-arrows-alt-h" style="margin-right: 6px;"></i>
+                        Позиция X (%)
+                    </label>
+                    <input type="number" id="tableX" required min="0" max="100" placeholder="50">
+                </div>
+                <div class="form-group">
+                    <label for="tableY">
+                        <i class="fas fa-arrows-alt-v" style="margin-right: 6px;"></i>
+                        Позиция Y (%)
+                    </label>
+                    <input type="number" id="tableY" required min="0" max="100" placeholder="50">
+                </div>
+                <div class="form-group">
+                    <label for="tableStatus">
+                        <i class="fas fa-toggle-on" style="margin-right: 6px;"></i>
+                        Статус
+                    </label>
+                    <select id="tableStatus">
+                        <option value="active">Активен</option>
+                        <option value="maintenance">На ремонте</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    <i class="fas fa-save"></i>
+                    Сохранить
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="notification" id="notification"></div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
