@@ -17,9 +17,10 @@
             <nav>
                 <ul>
                     <li><a href="#about">О ресторане</a></li>
-                    <li><a href="#menu">Меню</a></li>
-                    <li><a href="#booking">Бронирование</a></li>
-                    <li><a href="#contacts">Контакты</a></li>
+        <li><a href="#menu">Меню</a></li>
+        <li><a href="#booking">Бронирование</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+        <li><a href="javascript:void(0)" id="cart-nav-link">Корзина</a></li>
                 </ul>
             </nav>
             <div id="auth-buttons" class="auth-buttons"></div>
@@ -163,10 +164,11 @@
 
    
     <!-- Section: Promotions -->
+<!-- Section: Promotions -->
 <section id="promotions" class="section promotions-section">
     <div class="container">
         <h2 class="section-title">Акции и предложения</h2>
-        
+   
         <div id="promotions-container" class="promotions-grid">
             <div class="loading">Загрузка акций...</div>
         </div>
@@ -333,15 +335,17 @@
         </div>
     </footer>
 
-    <script src="utils.js"></script>
-    <script src="auth.js"></script>
-    <script src="tables.js"></script>
-    <script src="mobile-tables.js"></script>
-    <script src="booking.js"></script>
-    <script src="menu.js"></script>
-    <script src="reviews.js"></script>
-    <script src="faq.js"></script>
+    <script src="supabase-config.js"></script>
+<script src="utils.js"></script>
+<script src="auth.js"></script>
+<script src="cart.js"></script>      <!-- СНАЧАЛА cart.js -->
+<script src="tables.js"></script>
+<script src="mobile-tables.js"></script>
+<script src="booking.js"></script>
+<script src="menu.js"></script>       <!-- ПОТОМ menu.js -->
+<script src="reviews.js"></script>
 <script src="promotions.js"></script>
+<script src="faq.js"></script>
     <script>
         function toggleMenu() {
             document.querySelector('nav ul').classList.toggle('active');

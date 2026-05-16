@@ -162,7 +162,7 @@ function updateAuthUI() {
                     <button class="user-menu-btn">
                         <span class="user-avatar">${userName.charAt(0).toUpperCase()}</span>
                         <span>${userName}</span>
-                        <span class="arrow">▾</span>
+                        <span class="arrow">▼</span>
                     </button>
                     <div class="user-dropdown-content">
                         <a href="#" onclick="loadProfilePage(); return false;">Мои бронирования</a>

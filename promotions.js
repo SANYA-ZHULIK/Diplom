@@ -1,30 +1,45 @@
-// promotions.js - акции (лаконичная версия)
+// promotions.js - акции
 
 async function loadPromotions() {
+    console.log('loadPromotions started');
+    
     const client = window.supabaseClient;
     if (!client) {
+        console.log('Waiting for Supabase...');
         setTimeout(loadPromotions, 500);
         return;
     }
     
     try {
         const today = new Date().toISOString().split('T')[0];
+        console.log('Today:', today);
+        
+        // Получаем все активные акции (уберем фильтр по датам для теста)
         const { data, error } = await client
             .from('promotions')
             .select('*')
-            .eq('is_active', true)
-            .lte('start_date', today)
-            .gte('end_date', today)
-            .order('created_at', { ascending: false });
+            .eq('is_active', true);
+            // .lte('start_date', today)
+            // .gte('end_date', today)
             
         if (error) throw error;
         
-        renderPromotions(data || []);
+        console.log('Promotions loaded:', data);
+        console.log('Promotions count:', data ? data.length : 0);
+        
+        if (data && data.length > 0) {
+            renderPromotions(data);
+        } else {
+            const container = document.getElementById('promotions-container');
+            if (container) {
+                container.innerHTML = '<div class="no-promotions">Нет активных акций</div>';
+            }
+        }
     } catch (err) {
         console.error('Error loading promotions:', err);
         const container = document.getElementById('promotions-container');
         if (container) {
-            container.innerHTML = '<div class="loading">Не удалось загрузить акции</div>';
+            container.innerHTML = '<div class="no-promotions">Ошибка загрузки акций: ' + (err.message || err) + '</div>';
         }
     }
 }
@@ -55,7 +70,7 @@ function renderPromotions(promotions) {
         
         let conditionHtml = '';
         if (promo.min_order_amount && promo.min_order_amount > 0) {
-            conditionHtml = `<div class="promotion-condition">от ${promo.min_order_amount} ₽</div>`;
+            conditionHtml = `<div class="promotion-condition">от ${promo.min_order_amount} руб.</div>`;
         }
         
         return `
@@ -66,7 +81,7 @@ function renderPromotions(promotions) {
                     <p class="promotion-description">${escapeHtml(promo.description || '')}</p>
                     ${conditionHtml}
                     <div class="promotion-dates">
-                        <span class="date-icon">📅</span> до ${formatDate(promo.end_date)}
+                        до ${formatDate(promo.end_date)}
                     </div>
                 </div>
             </div>
@@ -86,17 +101,33 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+// Запускаем после загрузки страницы
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('promotions-container')) {
-        if (window.supabaseClient) {
-            loadPromotions();
-        } else {
-            const checkInterval = setInterval(() => {
-                if (window.supabaseClient) {
-                    clearInterval(checkInterval);
-                    loadPromotions();
-                }
-            }, 300);
-        }
+    console.log('DOM loaded, checking for promotions container');
+    
+    // Проверяем наличие контейнера
+    const container = document.getElementById('promotions-container');
+    if (container) {
+        console.log('Promotions container found, waiting for Supabase...');
+        
+        // Ждём Supabase
+        const waitForSupabase = setInterval(() => {
+            if (window.supabaseClient) {
+                console.log('Supabase client ready');
+                clearInterval(waitForSupabase);
+                loadPromotions();
+            }
+        }, 200);
+        
+        // Таймаут на всякий случай
+        setTimeout(() => {
+            if (!window.supabaseClient) {
+                clearInterval(waitForSupabase);
+                container.innerHTML = '<div class="no-promotions">Ошибка подключения к базе данных</div>';
+            }
+        }, 10000);
+        
+    } else {
+        console.error('Promotions container NOT found in DOM!');
     }
 });

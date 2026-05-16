@@ -23,7 +23,6 @@ async function loadMenuFromDB() {
         allMenuItems = data || [];
         console.log('Loaded menu items:', allMenuItems.length);
         
-        // Получаем активную категорию
         const activeBtn = document.querySelector('.menu-category.active');
         const activeCategory = activeBtn ? activeBtn.dataset.category : 'Салаты';
         
@@ -56,13 +55,11 @@ function renderMenuItems(items, activeCategory = null) {
         return;
     }
 
-    // Если категория не передана, берём активную из кнопки
     if (!activeCategory) {
         const activeBtn = document.querySelector('.menu-category.active');
         activeCategory = activeBtn ? activeBtn.dataset.category : 'Салаты';
     }
 
-    // Группировка по категориям
     const grouped = {};
     items.forEach(item => {
         const cat = item.category || 'Без категории';
@@ -72,7 +69,6 @@ function renderMenuItems(items, activeCategory = null) {
 
     let html = '';
     for (const [category, categoryItems] of Object.entries(grouped)) {
-        // Показываем только активную категорию, остальные скрываем
         const displayStyle = category === activeCategory ? 'block' : 'none';
         html += `<div class="menu-category-group" data-category="${category}" style="display: ${displayStyle}">`;
         html += `<h3 class="category-title">${escapeHtml(category)}</h3>`;
@@ -83,12 +79,15 @@ function renderMenuItems(items, activeCategory = null) {
             html += `
                 <div class="menu-item-card">
                     <div class="menu-item-photo">
-                        <img src="${photoUrl}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='/photo_/no_photo.jpg'">
+                        <img src="${photoUrl}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='photo_/no_photo.jpg'">
                     </div>
                     <div class="menu-item-info">
                         <h4>${escapeHtml(item.name)}</h4>
                         <p class="menu-item-desc">${escapeHtml(item.description || '')}</p>
                         <div class="menu-item-price">${item.price} руб.</div>
+                        <button class="btn-add-to-cart" data-id="${item.id}" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-photo="${item.photo_url || ''}">
+                            В корзину
+                        </button>
                     </div>
                 </div>
             `;
@@ -98,6 +97,29 @@ function renderMenuItems(items, activeCategory = null) {
     }
 
     container.innerHTML = html;
+    
+    // Обработчики для кнопок "В корзину"
+    const cartButtons = document.querySelectorAll('.btn-add-to-cart');
+    console.log('Found cart buttons:', cartButtons.length);
+    
+    cartButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = parseInt(this.dataset.id);
+            const name = this.dataset.name;
+            const price = parseFloat(this.dataset.price);
+            const photo_url = this.dataset.photo;
+            
+            console.log('Add to cart clicked:', {id, name, price});
+            
+            if (typeof window.addToCart === 'function') {
+                window.addToCart({ id, name, price, photo_url });
+            } else {
+                console.error('addToCart function not found!');
+                alert('Ошибка: корзина не загружена. Обновите страницу.');
+            }
+        });
+    });
 }
 
 function escapeHtml(str) {
@@ -107,7 +129,6 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
-// Фильтрация по категории (если нужна)
 function filterMenuByCategory(category) {
     const groups = document.querySelectorAll('.menu-category-group');
     if (!groups.length) return;

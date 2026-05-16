@@ -73,7 +73,6 @@ function renderBookings(bookings) {
     if (!bookings.length) {
         container.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">📅</div>
                 <p>У вас пока нет бронирований</p>
                 <a href="/#booking" class="btn-primary">Забронировать столик</a>
             </div>
@@ -82,10 +81,10 @@ function renderBookings(bookings) {
     }
     
     const statusLabels = {
-        new: '⏳ Новая',
-        confirmed: '✅ Подтверждена',
-        completed: '✔️ Завершена',
-        cancelled: '❌ Отменена'
+        new: 'Новая',
+        confirmed: 'Подтверждена',
+        completed: 'Завершена',
+        cancelled: 'Отменена'
     };
     
     const statusClass = {
@@ -103,23 +102,23 @@ function renderBookings(bookings) {
                     ${statusLabels[booking.status] || booking.status}
                 </span>
             </div>
-            <div class="booking-details">
-                <div class="detail-item">
-                    <span class="detail-label">🕐 Время:</span>
-                    <span class="detail-value">${booking.time_slot}</span>
+            <div class="booking-info-list">
+                <div class="booking-info-row">
+                    <span class="booking-info-label">Время:</span>
+                    <span class="booking-info-value">${booking.time_slot}</span>
                 </div>
-                <div class="detail-item">
-                    <span class="detail-label">🍽️ Стол:</span>
-                    <span class="detail-value">№${booking.tables?.number || booking.table_id}</span>
+                <div class="booking-info-row">
+                    <span class="booking-info-label">Стол:</span>
+                    <span class="booking-info-value">№${booking.tables?.number || booking.table_id}</span>
                 </div>
-                <div class="detail-item">
-                    <span class="detail-label">👥 Гостей:</span>
-                    <span class="detail-value">${booking.guests_count}</span>
+                <div class="booking-info-row">
+                    <span class="booking-info-label">Количество гостей:</span>
+                    <span class="booking-info-value">${booking.guests_count}</span>
                 </div>
                 ${booking.comment ? `
-                <div class="detail-item">
-                    <span class="detail-label">💬 Комментарий:</span>
-                    <span class="detail-value">${escapeHtml(booking.comment)}</span>
+                <div class="booking-info-row">
+                    <span class="booking-info-label">Комментарий:</span>
+                    <span class="booking-info-value">${escapeHtml(booking.comment)}</span>
                 </div>
                 ` : ''}
             </div>
@@ -155,7 +154,6 @@ function renderOrders(orders) {
     if (!orders.length) {
         container.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">🧾</div>
                 <p>У вас пока нет заказов</p>
                 <a href="/#menu" class="btn-primary">Посмотреть меню</a>
             </div>
@@ -185,14 +183,14 @@ function renderOrders(orders) {
                     <div class="order-item">
                         <span class="order-item-name">${escapeHtml(item.menu_items?.name || 'Блюдо')}</span>
                         <span class="order-item-quantity">x${item.quantity}</span>
-                        <span class="order-item-price">${item.unit_price} ₽</span>
+                        <span class="order-item-price">${item.unit_price} руб.</span>
                     </div>
                 `).join('') || '<div class="no-items">Нет позиций</div>'}
             </div>
             <div class="order-total">
-                Итого: <strong>${order.total_amount} ₽</strong>
+                Итого: <strong>${order.total_amount} руб.</strong>
             </div>
-            ${order.notes ? `<div class="order-notes">📝 ${escapeHtml(order.notes)}</div>` : ''}
+            ${order.notes ? `<div class="order-notes">${escapeHtml(order.notes)}</div>` : ''}
         </div>
     `).join('');
 }
