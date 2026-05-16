@@ -160,8 +160,9 @@ nav ul {
 
 /* ===== ОСНОВНОЙ КОНТЕНТ АДМИНКИ ===== */
 .admin-content {
-    padding-top: 100px; /* Отступ для фиксированной шапки */
-    min-height: calc(100vh - 200px);
+    padding-top: 100px;
+    width: 100%;
+    overflow-x: auto;
 }
 
 /* ===== ОСТАЛЬНЫЕ СТИЛИ (без изменений) ===== */
@@ -659,16 +660,20 @@ footer {
 .bookings-table-container {
     background: var(--white);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: 1rem;
     box-shadow: var(--shadow);
     margin-bottom: 2rem;
+    width: 100%;
     overflow-x: auto;
 }
 
 .bookings-table {
     width: 100%;
+    min-width: 100%;
     border-collapse: collapse;
+    font-size: 0.85rem;
 }
+
 
 .bookings-table th,
 .bookings-table td {
@@ -681,8 +686,34 @@ footer {
 .bookings-table th {
     background: var(--primary);
     color: white;
+    padding: 0.8rem 0.5rem;
     font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
 }
+.bookings-table td {
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+.bookings-table th:nth-child(1),
+.bookings-table td:nth-child(1) { width: 5%; }  /* ID */
+.bookings-table th:nth-child(2),
+.bookings-table td:nth-child(2) { width: 8%; }  /* Стол */
+.bookings-table th:nth-child(3),
+.bookings-table td:nth-child(3) { width: 15%; } /* Имя */
+.bookings-table th:nth-child(4),
+.bookings-table td:nth-child(4) { width: 15%; } /* Телефон */
+.bookings-table th:nth-child(5),
+.bookings-table td:nth-child(5) { width: 10%; } /* Дата */
+.bookings-table th:nth-child(6),
+.bookings-table td:nth-child(6) { width: 8%; }  /* Время */
+.bookings-table th:nth-child(7),
+.bookings-table td:nth-child(7) { width: 6%; }  /* Гости */
+.bookings-table th:nth-child(8),
+.bookings-table td:nth-child(8) { width: 12%; } /* Статус */
+.bookings-table th:nth-child(9),
+.bookings-table td:nth-child(9) { width: 21%; } /* Действия */
 
 .status-select {
     padding: 0.3rem 0.5rem;
@@ -1511,4 +1542,484 @@ footer {
 
 .table-block button.btn-block:hover {
     background: #c0392b;
+}
+/* ===== REVIEWS SECTION ===== */
+.reviews-section {
+    background: linear-gradient(135deg, #f9f6f0 0%, #f0ebe3 100%);
+}
+
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.reviews-subtitle {
+    font-size: 1rem;
+    color: var(--gray);
+    margin: 0;
+}
+
+.btn-leave-review {
+    background: var(--primary);
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.review-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.review-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.review-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-name {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.review-date {
+    font-size: 0.75rem;
+    color: var(--gray);
+}
+
+.review-rating {
+    display: flex;
+    gap: 4px;
+}
+
+.review-rating .star {
+    color: #ddd;
+    font-size: 1.1rem;
+}
+
+.review-rating .star.filled {
+    color: #ffc107;
+}
+
+.review-content {
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+.review-content p {
+    margin: 0;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray);
+    background: var(--white);
+    border-radius: var(--radius);
+}
+
+/* Review Form */
+.star-rating-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.rating-select {
+    width: auto !important;
+    min-width: 120px;
+}
+
+.stars {
+    display: flex;
+    gap: 8px;
+}
+
+.stars .star {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.stars .star.filled {
+    color: #ffc107;
+}
+
+.stars .star.hover {
+    color: #ffc107;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .reviews-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .stars .star {
+        font-size: 1.5rem;
+    }
+}
+/* ===== АДМИН КНОПКИ - СТАНДАРТИЗИРОВАННЫЕ ===== */
+/* Все кнопки действий имеют одинаковый размер и стиль */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    min-width: 85px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    line-height: 1;
+}
+
+/* Кнопка Редактировать */
+.btn-edit {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-edit:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+/* Кнопка Удалить */
+.btn-delete {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+/* Кнопка Сохранить */
+.btn-save {
+    background: var(--success);
+    color: white;
+}
+
+.btn-save:hover {
+    background: #219a52;
+    transform: translateY(-1px);
+}
+
+/* Кнопка Отмена */
+.btn-cancel {
+    background: #7f8c8d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #6c7b7d;
+    transform: translateY(-1px);
+}
+
+/* Кнопка Показать/Скрыть для меню */
+.btn-show, .btn-hide {
+    min-width: 85px;
+    height: 36px;
+}
+
+.btn-show {
+    background: var(--success);
+    color: white;
+}
+
+.btn-show:hover {
+    background: #219a52;
+}
+
+.btn-hide {
+    background: #7f8c8d;
+    color: white;
+}
+
+.btn-hide:hover {
+    background: #6c7b7d;
+}
+
+/* Блок кнопок в строке таблицы */
+.bookings-table .action-buttons,
+.bookings-table td:last-child {
+    white-space: nowrap;
+}
+
+.bookings-table .btn-action {
+    margin: 0 2px;
+}
+
+/* Стили для поля редактирования */
+.edit-input {
+    width: 100%;
+    min-width: 150px;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    background: white;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .btn-action {
+        min-width: 70px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
+    
+    .edit-input {
+        min-width: 100px;
+        font-size: 0.75rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+}
+/* ===== ФИКСИРОВАННАЯ ШИРИНА ТАБЛИЦЫ БРОНЕЙ ===== */
+.bookings-table-container {
+    overflow-x: auto;
+}
+
+.bookings-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+    table-layout: fixed; /* Фиксированная ширина колонок */
+}
+
+/* Фиксированная ширина для каждой колонки */
+.bookings-table th:nth-child(1),
+.bookings-table td:nth-child(1) {
+    width: 60px;
+}
+
+.bookings-table th:nth-child(2),
+.bookings-table td:nth-child(2) {
+    width: 70px;
+}
+
+.bookings-table th:nth-child(3),
+.bookings-table td:nth-child(3) {
+    width: 150px;
+}
+
+.bookings-table th:nth-child(4),
+.bookings-table td:nth-child(4) {
+    width: 140px;
+}
+
+.bookings-table th:nth-child(5),
+.bookings-table td:nth-child(5) {
+    width: 110px;
+}
+
+.bookings-table th:nth-child(6),
+.bookings-table td:nth-child(6) {
+    width: 90px;
+}
+
+.bookings-table th:nth-child(7),
+.bookings-table td:nth-child(7) {
+    width: 70px;
+}
+
+.bookings-table th:nth-child(8),
+.bookings-table td:nth-child(8) {
+    width: 130px;
+}
+
+.bookings-table th:nth-child(9),
+.bookings-table td:nth-child(9) {
+    width: 180px;
+}
+
+/* Стили для полей редактирования внутри таблицы */
+.edit-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    background: white;
+    box-sizing: border-box;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+}
+
+/* Фиксированный контейнер для кнопок */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* Кнопки действий - фиксированная ширина */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.8rem;
+    min-width: 80px;
+    height: 34px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Разные цвета кнопок */
+.btn-edit {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-edit:hover {
+    background: var(--primary-dark);
+}
+
+.btn-delete {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+.btn-save {
+    background: var(--success);
+    color: white;
+}
+
+.btn-save:hover {
+    background: #219a52;
+}
+
+.btn-cancel {
+    background: #7f8c8d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #6c7b7d;
+}
+
+/* Статус-селект - фиксированная ширина */
+.status-select {
+    width: 100%;
+    max-width: 120px;
+    padding: 0.4rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background: white;
+}
+
+/* Для строки, которая редактируется - подсветка */
+.editing-row {
+    background: rgba(212, 165, 116, 0.1);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 900px) {
+    .bookings-table {
+        min-width: 900px;
+    }
+    
+    .btn-action {
+        min-width: 70px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
 }
