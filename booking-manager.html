@@ -110,12 +110,24 @@
                 </div>
 
                 <!-- Tab: Tables -->
-                <div id="tables-tab" class="tab-content">
-                    <div class="tables-management">
-                        <h3>Управление столиками</h3>
-                        <div id="tables-list"></div>
-                    </div>
-                </div>
+                <!-- Tab: Tables -->
+<div id="tables-tab" class="tab-content">
+    <div class="tables-management">
+        <div class="tables-header">
+            <h3>Управление столиками</h3>
+            <select id="tables-zone-filter" class="zone-filter">
+                <option value="all">Все зоны</option>
+                <option value="первая позиция">Первая позиция</option>
+                <option value="вторая позиция">Вторая позиция</option>
+                <option value="третья позиция">Третья позиция</option>
+                <option value="средний зал">Средний зал</option>
+                <option value="танцпол">Танцпол</option>
+                <option value="подвал">Подвал</option>
+            </select>
+        </div>
+        <div id="tables-list"></div>
+    </div>
+</div>
 
                 <!-- Tab: Menu -->
                 <div id="menu-tab" class="tab-content">
