@@ -29,93 +29,115 @@
 
     <!-- Admin Panel -->
     <div id="admin-panel" style="display: none;">
-        <div class="admin-header">
-            <div class="container">
-                <div class="logo">Панель управления</div>
-                <div>
-                    <button id="logout-btn">Выйти</button>
-                </div>
+        <!-- Header with navigation -->
+        <header>
+            <div class="container header-inner">
+                <a href="/" class="logo"><img src="logo.png" alt="У Ратуши">У Ратуши</a>
+                <nav class="admin-nav">
+                    <ul>
+                        <li><a href="#" class="admin-nav-link active" data-tab="bookings">Бронирования</a></li>
+                        <li><a href="#" class="admin-nav-link" data-tab="tables">Столики</a></li>
+                        <li><a href="#" class="admin-nav-link" data-tab="menu">Меню</a></li>
+                    </ul>
+                </nav>
+                <button id="logout-btn" class="btn-primary">Выйти</button>
             </div>
-        </div>
+        </header>
 
         <div class="admin-content">
             <div class="container">
-                <!-- Bookings Table -->
-                <div class="bookings-table-container">
-                    <h2>Бронирования</h2>
-                    <table class="bookings-table admin-bookings-table">
-                        <colgroup>
-                            <col style="width: 60px;">
-                            <col style="width: 80px;">
-                            <col style="width: 150px;">
-                            <col style="width: 140px;">
-                            <col style="width: 110px;">
-                            <col style="width: 90px;">
-                            <col style="width: 70px;">
-                            <col style="width: 130px;">
-                            <col style="width: 180px;">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Стол</th>
-                                <th>Имя</th>
-                                <th>Телефон</th>
-                                <th>Дата</th>
-                                <th>Время</th>
-                                <th>Гости</th>
-                                <th>Статус</th>
-                                <th>Действия</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bookings-tbody"></tbody>
-                    </table>
+                <!-- Tab: Bookings -->
+                <div id="bookings-tab" class="tab-content active">
+                    <div class="bookings-table-container">
+                        <h2>Бронирования</h2>
+                        <table class="bookings-table admin-bookings-table">
+                            <colgroup>
+                                <col style="width: 60px;">
+                                <col style="width: 80px;">
+                                <col style="width: 150px;">
+                                <col style="width: 140px;">
+                                <col style="width: 110px;">
+                                <col style="width: 90px;">
+                                <col style="width: 70px;">
+                                <col style="width: 130px;">
+                                <col style="width: 180px;">
+                            </colgroup>
+                            <thead>
+                                <tr><th>ID</th><th>Стол</th><th>Имя</th><th>Телефон</th><th>Дата</th><th>Время</th><th>Гости</th><th>Статус</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="bookings-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="manual-booking-form">
+                        <h3>Добавить бронь</h3>
+                        <form id="manual-booking-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="manual-table">Стол</label>
+                                    <select id="manual-table" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="manual-date">Дата</label>
+                                    <input type="date" id="manual-date" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="manual-time">Время</label>
+                                    <select id="manual-time" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="manual-guests">Гости</label>
+                                    <select id="manual-guests" required></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="manual-name">Имя клиента</label>
+                                <input type="text" id="manual-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="manual-phone">Телефон</label>
+                                <input type="tel" id="manual-phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="manual-comment">Комментарий</label>
+                                <textarea id="manual-comment" rows="2"></textarea>
+                            </div>
+                            <button type="submit">Добавить бронь</button>
+                        </form>
+                    </div>
                 </div>
 
-                <!-- Manual Booking Form -->
-                <div class="manual-booking-form">
-                    <h3>Добавить бронь</h3>
-                    <form id="manual-booking-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="manual-table">Стол</label>
-                                <select id="manual-table" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="manual-date">Дата</label>
-                                <input type="date" id="manual-date" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="manual-time">Время</label>
-                                <select id="manual-time" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="manual-guests">Гости</label>
-                                <select id="manual-guests" required></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="manual-name">Имя клиента</label>
-                            <input type="text" id="manual-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="manual-phone">Телефон</label>
-                            <input type="tel" id="manual-phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="manual-comment">Комментарий</label>
-                            <textarea id="manual-comment" rows="2"></textarea>
-                        </div>
-                        <button type="submit">Добавить бронь</button>
-                    </form>
+                <!-- Tab: Tables -->
+                <div id="tables-tab" class="tab-content">
+                    <div class="tables-management">
+                        <h3>Управление столиками</h3>
+                        <div id="tables-list"></div>
+                    </div>
                 </div>
 
-                <!-- Tables Management -->
-                <div class="tables-management">
-                    <h3>Управление столиками</h3>
-                    <div id="tables-list"></div>
+                <!-- Tab: Menu -->
+                <div id="menu-tab" class="tab-content">
+                    <div class="menu-controls">
+                        <button id="add-dish-btn" class="btn-primary">+ Добавить блюдо</button>
+                        <input type="text" id="menu-search" placeholder="Поиск по названию..." class="menu-search-input">
+                        <select id="category-filter" class="category-filter">
+                            <option value="">Все категории</option>
+                            <option value="Салаты">Салаты</option>
+                            <option value="Супы">Супы</option>
+                            <option value="Холодные закуски">Холодные закуски</option>
+                            <option value="Закуски к пиву">Закуски к пиву</option>
+                            <option value="Мясо и птица">Мясо и птица</option>
+                            <option value="Рыба и морепродукты">Рыба и морепродукты</option>
+                            <option value="Белорусская кухня">Белорусская кухня</option>
+                            <option value="Гарниры">Гарниры</option>
+                            <option value="Соусы">Соусы</option>
+                            <option value="Десерты">Десерты</option>
+                            <option value="Напитки">Напитки</option>
+                        </select>
+                    </div>
+                    <div id="menu-list" class="menu-list-admin"></div>
                 </div>
             </div>
         </div>
@@ -129,6 +151,103 @@
         </div>
     </div>
 
+    <!-- Modal: Add/Edit Dish -->
+    <div id="dish-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="dish-modal-title">Добавить блюдо</h3>
+            <form id="dish-form">
+                <div class="form-group">
+                    <label for="dish-name">Название *</label>
+                    <input type="text" id="dish-name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dish-category">Категория *</label>
+                        <select id="dish-category" required>
+                            <option value="">Выберите</option>
+                            <option value="Салаты">Салаты</option>
+                            <option value="Супы">Супы</option>
+                            <option value="Холодные закуски">Холодные закуски</option>
+                            <option value="Закуски к пиву">Закуски к пиву</option>
+                            <option value="Мясо и птица">Мясо и птица</option>
+                            <option value="Рыба и морепродукты">Рыба и морепродукты</option>
+                            <option value="Белорусская кухня">Белорусская кухня</option>
+                            <option value="Гарниры">Гарниры</option>
+                            <option value="Соусы">Соусы</option>
+                            <option value="Десерты">Десерты</option>
+                            <option value="Напитки">Напитки</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dish-price">Цена (руб) *</label>
+                        <input type="number" id="dish-price" required min="0" step="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dish-description">Состав / Описание</label>
+                    <textarea id="dish-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Фото</label>
+                    <div class="photo-upload-wrapper">
+                        <div class="photo-preview" id="photo-preview">
+                            <img src="photo_/no_photo.jpg" alt="Preview">
+                        </div>
+                        <div>
+                            <label for="dish-photo" class="file-input-label">Выбрать фото</label>
+                            <input type="file" id="dish-photo" accept="image/*">
+                            <span class="file-name-display" id="file-name-display"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="dish-is-active" checked>
+                        <span>Активно (отображается в меню)</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script src="utils.js"></script>
     <script src="admin-panel.js"></script>
+    <script src="admin-menu.js"></script>
+    <script>
+        // Навигация в админ-панели
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.admin-nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            function switchTab(tabId) {
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                const activeTab = document.getElementById(tabId + '-tab');
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.tab === tabId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchTab(this.dataset.tab);
+                });
+            });
+            
+            // Активируем вкладку "Бронирования" по умолчанию
+            switchTab('bookings');
+        });
+    </script>
 </body>
 </html>

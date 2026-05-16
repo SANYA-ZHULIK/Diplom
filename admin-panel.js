@@ -9,7 +9,40 @@ const ADMIN_EMAIL = 'admin@restaurant.com', ADMIN_PASSWORD = 'admin123';
 function getClient() { return window.supabaseClient; }
 function isAdminLoggedIn() { return sessionStorage.getItem('adminLoggedIn') === 'true'; }
 function setAdminLoggedIn(v) { v ? sessionStorage.setItem('adminLoggedIn','true') : sessionStorage.removeItem('adminLoggedIn'); }
+// Header scroll effect for admin panel
+function initAdminHeaderScroll() {
+    const header = document.querySelector('header');
+    if (!header) return;
 
+    let ticking = false, isScrolled = false;
+
+    function updateHeaderOnScroll() {
+        const scrollY = window.scrollY;
+        if (scrollY < 100) {
+            if (isScrolled) {
+                isScrolled = false;
+                header.style.background = 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)';
+                header.style.boxShadow = 'none';
+            }
+        } else if (!isScrolled) {
+            isScrolled = true;
+            header.style.background = 'linear-gradient(to bottom, rgba(212, 165, 116, 0.9) 0%, rgba(212, 165, 116, 0.85) 100%)';
+            header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+        }
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateHeaderOnScroll);
+            ticking = true;
+        }
+    }, { passive: true });
+    updateHeaderOnScroll();
+}
+
+// Вызвать после загрузки страницы
+document.addEventListener('DOMContentLoaded', initAdminHeaderScroll);
 function showAdminPanel() {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
