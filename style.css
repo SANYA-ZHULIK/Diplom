@@ -3251,13 +3251,14 @@ footer {
     justify-content: center;
     padding: 0 4px;
 }
-/* Employees management */
+/* Employees management - FULL WIDTH */
 .employees-management {
     background: var(--white);
     padding: 2rem;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     width: 100%;
+    margin: 0;
 }
 
 .employees-header {
@@ -3291,17 +3292,20 @@ footer {
 }
 
 .employees-list {
+    display: block;
     width: 100%;
     overflow-x: auto;
 }
 
 .employees-table {
     width: 100%;
+    min-width: 100%;
     border-collapse: collapse;
     background: var(--white);
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
+    table-layout: fixed;
 }
 
 .employees-table th {
@@ -3319,6 +3323,10 @@ footer {
     vertical-align: middle;
     font-size: 0.85rem;
     text-align: center;
+}
+
+.employees-table tr:hover {
+    background: var(--light);
 }
 
 .employee-status {
@@ -3348,13 +3356,48 @@ footer {
 
 .employee-actions .btn-action {
     padding: 4px 8px;
-    min-width: 65px;
+    min-width: 60px;
     font-size: 0.7rem;
     height: 28px;
 }
 
-@media (max-width: 768px) {
+/* Ширина колонок */
+.employees-table th:nth-child(1) { width: 20%; }  /* ФИО */
+.employees-table th:nth-child(2) { width: 12%; }  /* Должность */
+.employees-table th:nth-child(3) { width: 12%; }  /* Телефон */
+.employees-table th:nth-child(4) { width: 15%; }  /* Email */
+.employees-table th:nth-child(5) { width: 10%; }  /* Дата приема */
+.employees-table th:nth-child(6) { width: 8%; }   /* Статус */
+.employees-table th:nth-child(7) { width: 23%; }  /* Действия */
+
+/* Responsive */
+@media (max-width: 1000px) {
     .employees-table {
-        min-width: 700px;
+        min-width: 800px;
+    }
+    
+    .employee-actions .btn-action {
+        min-width: 55px;
+        padding: 4px 6px;
+        font-size: 0.65rem;
     }
 }
+
+@media (max-width: 768px) {
+    .admin-content .container {
+        padding: 0 10px;
+    }
+    
+    .employees-management {
+        padding: 1rem;
+    }
+    
+    .employees-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .employees-search-input {
+        max-width: 100%;
+    }
+}   
