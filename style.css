@@ -3401,3 +3401,214 @@ footer {
         max-width: 100%;
     }
 }   
+
+/* Employees sub-tabs */
+.employees-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.employees-subtab {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--gray);
+    transition: all 0.3s;
+}
+
+.employees-subtab.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    font-weight: 600;
+}
+
+.employees-subtab-content {
+    display: none;
+}
+
+.employees-subtab-content.active {
+    display: block;
+}
+
+/* Shifts management - FULL WIDTH */
+.shifts-management {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    margin: 0;
+}
+
+.shifts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.shifts-header h3 {
+    color: var(--primary);
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 0.5rem;
+    margin: 0;
+}
+
+.shifts-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.shifts-search-input,
+.shifts-date-filter {
+    padding: 0.6rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.shifts-list {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.shifts-table {
+    width: 100%;
+    min-width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    table-layout: fixed;
+}
+
+.shifts-table th {
+    background: var(--primary);
+    color: white;
+    padding: 12px 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.shifts-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.shifts-table tr:hover {
+    background: var(--light);
+}
+
+.shift-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.shift-actions .btn-action {
+    padding: 4px 8px;
+    min-width: 60px;
+    font-size: 0.7rem;
+    height: 28px;
+}
+
+/* Ширина колонок таблицы смен */
+.shifts-table th:nth-child(1) { width: 12%; }  /* Дата */
+.shifts-table th:nth-child(2) { width: 20%; }  /* Сотрудник */
+.shifts-table th:nth-child(3) { width: 10%; }  /* Начало */
+.shifts-table th:nth-child(4) { width: 10%; }  /* Конец */
+.shifts-table th:nth-child(5) { width: 10%; }  /* Длительность */
+.shifts-table th:nth-child(6) { width: 28%; }  /* Примечание */
+.shifts-table th:nth-child(7) { width: 10%; }  /* Действия */
+
+/* Employees sub-tabs */
+.employees-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.employees-subtab {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--gray);
+    transition: all 0.3s;
+}
+
+.employees-subtab.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    font-weight: 600;
+}
+
+.employees-subtab-content {
+    display: none;
+}
+
+.employees-subtab-content.active {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+    .shifts-table {
+        min-width: 800px;
+    }
+    
+    .shift-actions .btn-action {
+        min-width: 55px;
+        padding: 4px 6px;
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-content .container {
+        padding: 0 10px;
+    }
+    
+    .shifts-management {
+        padding: 1rem;
+    }
+    
+    .shifts-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .shifts-controls {
+        flex-direction: column;
+    }
+    
+    .shifts-search-input,
+    .shifts-date-filter {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .employees-tabs {
+        justify-content: center;
+    }
+}

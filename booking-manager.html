@@ -166,66 +166,47 @@
                         <div id="suppliers-list" class="suppliers-list"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-            <!-- Tab: Employees -->
-<div id="employees-tab" class="tab-content">
-    <div class="employees-management">
-        <div class="employees-header">
-            <h3>Управление сотрудниками</h3>
-            <button id="add-employee-btn" class="btn-primary">+ Добавить сотрудника</button>
-        </div>
-        <div class="employees-controls">
-            <input type="text" id="employees-search" placeholder="Поиск по имени, должности, email..." class="employees-search-input">
-        </div>
-        <div id="employees-list" class="employees-list"></div>
-    </div>
-</div>
 
-<!-- Modal: Add/Edit Employee -->
-<div id="employee-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h3 id="employee-modal-title">Добавить сотрудника</h3>
-        <form id="employee-form">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Имя *</label>
-                    <input type="text" id="employee-first-name" required>
+                <!-- Tab: Employees (with sub-tabs) -->
+                <div id="employees-tab" class="tab-content">
+                    <!-- Подвкладки -->
+                    <div class="employees-tabs">
+                        <button class="employees-subtab active" data-subtab="employees-list">Список сотрудников</button>
+                        <button class="employees-subtab" data-subtab="employee-shifts">График смен</button>
+                    </div>
+                    
+                    <!-- Подвкладка: Список сотрудников -->
+                    <div id="employees-list-subtab" class="employees-subtab-content active">
+                        <div class="employees-management">
+                            <div class="employees-header">
+                                <h3>Управление сотрудниками</h3>
+                                <button id="add-employee-btn" class="btn-primary">+ Добавить сотрудника</button>
+                            </div>
+                            <div class="employees-controls">
+                                <input type="text" id="employees-search" placeholder="Поиск по имени, должности, email..." class="employees-search-input">
+                            </div>
+                            <div id="employees-list" class="employees-list"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Подвкладка: График смен -->
+                    <div id="employee-shifts-subtab" class="employees-subtab-content">
+                        <div class="shifts-management">
+                            <div class="shifts-header">
+                                <h3>График смен сотрудников</h3>
+                                <button id="add-shift-btn" class="btn-primary">+ Добавить смену</button>
+                            </div>
+                            <div class="shifts-controls">
+                                <input type="text" id="shifts-search" placeholder="Поиск по сотруднику..." class="shifts-search-input">
+                                <input type="date" id="shifts-date-filter" class="shifts-date-filter" placeholder="Фильтр по дате">
+                            </div>
+                            <div id="shifts-list" class="shifts-list"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Фамилия *</label>
-                    <input type="text" id="employee-last-name" required>
-                </div>
             </div>
-            <div class="form-group">
-                <label>Должность</label>
-                <input type="text" id="employee-position" placeholder="Администратор, Официант, Повар...">
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Телефон</label>
-                    <input type="tel" id="employee-phone" placeholder="+375 29 123-45-67">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="employee-email" placeholder="example@mail.com">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Дата приема</label>
-                <input type="date" id="employee-hire-date">
-            </div>
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="employee-is-active" checked>
-                    Сотрудник работает
-                </label>
-            </div>
-            <button type="submit" class="btn-primary">Сохранить</button>
-        </form>
-    </div>
-</div>
+        </div>
+
         <!-- Loading Overlay -->
         <div id="loading-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
             <div style="background:white; padding:2rem; border-radius:8px; text-align:center;">
@@ -329,12 +310,93 @@
         </div>
     </div>
 
+    <!-- Modal: Add/Edit Employee -->
+    <div id="employee-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="employee-modal-title">Добавить сотрудника</h3>
+            <form id="employee-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Имя *</label>
+                        <input type="text" id="employee-first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Фамилия *</label>
+                        <input type="text" id="employee-last-name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Должность</label>
+                    <input type="text" id="employee-position" placeholder="Администратор, Официант, Повар...">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" id="employee-phone" placeholder="+375 29 123-45-67">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="employee-email" placeholder="example@mail.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Дата приема</label>
+                    <input type="date" id="employee-hire-date">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="employee-is-active" checked>
+                        Сотрудник работает
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add/Edit Shift -->
+    <div id="shift-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="shift-modal-title">Добавить смену</h3>
+            <form id="shift-form">
+                <div class="form-group">
+                    <label>Сотрудник *</label>
+                    <select id="shift-employee-id" required>
+                        <option value="">Выберите сотрудника</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Дата *</label>
+                    <input type="date" id="shift-work-date" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Начало смены *</label>
+                        <input type="time" id="shift-start-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Конец смены *</label>
+                        <input type="time" id="shift-end-time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Примечание</label>
+                    <textarea id="shift-notes" rows="2" placeholder="Дополнительная информация..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
     <script src="supabase-config.js"></script>
     <script src="utils.js"></script>
     <script src="admin-panel.js"></script>
     <script src="admin-menu.js"></script>
     <script src="admin-suppliers.js"></script>
     <script src="admin-employees.js"></script>
+    <script src="admin-shifts.js"></script>
     <script>
         // Навигация в админ-панели
         document.addEventListener('DOMContentLoaded', function() {
